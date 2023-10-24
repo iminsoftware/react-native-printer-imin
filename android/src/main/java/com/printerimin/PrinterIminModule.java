@@ -1,11 +1,21 @@
 package com.printerimin;
 
+import android.graphics.Bitmap;
+import android.graphics.Typeface;
+import android.os.Build;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.module.annotations.ReactModule;
 
 import com.imin.library.IminSDKManager;
@@ -13,6 +23,16 @@ import com.imin.library.SystemPropManager;
 import com.imin.printerlib.Callback;
 import com.imin.printerlib.IminPrintUtils;
 import com.imin.printerlib.print.PrintUtils;
+
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 @ReactModule(name = PrinterIminModule.NAME)
 public class PrinterIminModule extends ReactContextBaseJavaModule {

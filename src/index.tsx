@@ -17,6 +17,8 @@ import {
   IminBarcodeTextPos,
   IminQrCodeStyle,
   IminDoubleQRCodeStyle,
+  IminPictureStyle,
+  IminBaseStyle,
 } from './typing';
 export {
   IminPrintAlign,
@@ -29,6 +31,8 @@ export {
   IminBarcodeTextPos,
   IminQrCodeStyle,
   IminDoubleQRCodeStyle,
+  IminPictureStyle,
+  IminBaseStyle,
 };
 const LINKING_ERROR =
   `The package 'react-native-printer-imin' doesn't seem to be linked. Make sure: \n\n` +
@@ -132,17 +136,22 @@ const PrinterSDK: IminPrinterType = {
   printColumnsText: PrinterImin.printColumnsText,
   setPageFormat: PrinterImin.setPageFormat,
   partialCut: PrinterImin.partialCut,
-  printSingleBitmap(uri: string | ImageSourcePropType, align?: IminPrintAlign) {
+  printSingleBitmap(
+    uri: string | ImageSourcePropType,
+    pictureStyle?: IminPictureStyle
+  ) {
     const path = Image.resolveAssetSource(uri as ImageSourcePropType);
     console.log('path', path);
     return PrinterImin.printSingleBitmap({
       url: path?.uri || uri,
-      align: align === undefined ? null : align,
+      align: pictureStyle?.align,
+      width: pictureStyle?.width,
+      height: pictureStyle?.height,
     });
   },
   printMultiBitmap(
     imgs: (string | ImageSourcePropType)[],
-    align?: IminPrintAlign
+    pictureStyle?: IminPictureStyle
   ) {
     const imgList: (
       | ImageResolvedAssetSource['uri']
@@ -156,12 +165,21 @@ const PrinterSDK: IminPrinterType = {
     });
     return PrinterImin.printMultiBitmap({
       urls: imgList,
-      align,
+      align: pictureStyle?.align,
+      width: pictureStyle?.width,
+      height: pictureStyle?.height,
     });
   },
-  printSingleBitmapBlackWhite(uri: string | ImageSourcePropType) {
+  printSingleBitmapBlackWhite(
+    uri: string | ImageSourcePropType,
+    baseStyle?: IminBaseStyle
+  ) {
     const path = Image.resolveAssetSource(uri as ImageSourcePropType);
-    return PrinterImin.printSingleBitmapBlackWhite({ url: path?.uri || uri });
+    return PrinterImin.printSingleBitmapBlackWhite({
+      url: path?.uri || uri,
+      width: baseStyle?.width,
+      height: baseStyle?.height,
+    });
   },
   setQrCodeSize: PrinterImin.setQrCodeSize,
   setLeftMargin: PrinterImin.setLeftMargin,

@@ -302,19 +302,39 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
   public void printSingleBitmap(ReadableMap config, final Promise promise) {
     try {
       String url = config.getString("url");
-      Bitmap image = Glide.with(reactContext).asBitmap().load(url).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).submit().get();
-      Log.d("printSingleBitmap", "image:" + image);
-      if (image.isRecycled()) {
-        return;
-      }
-      if (iminPrintUtils != null) {
-        if (config.hasKey("align")) {
-          int align = config.getInt("align");
-          iminPrintUtils.printSingleBitmap(image, align);
-        } else {
-          iminPrintUtils.printSingleBitmap(image);
+      if (config.hasKey("width") && config.hasKey("height")) {
+        int width = config.getInt("width");
+        int height = config.getInt("height");
+        Bitmap image = Glide.with(reactContext).asBitmap().load(url).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).submit(width, height).get();
+        Log.d("printSingleBitmap", "image:" + image);
+        if (image.isRecycled()) {
+          return;
+        }
+        if (iminPrintUtils != null) {
+          if (config.hasKey("align")) {
+            int align = config.getInt("align");
+            iminPrintUtils.printSingleBitmap(image, align);
+          } else {
+            iminPrintUtils.printSingleBitmap(image);
+          }
+        }
+      } else {
+        Bitmap image = Glide.with(reactContext).asBitmap().load(url).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).submit().get();
+        Log.d("printSingleBitmap", "image:" + image);
+        if (image.isRecycled()) {
+          return;
+        }
+        if (iminPrintUtils != null) {
+          if (config.hasKey("align")) {
+            int align = config.getInt("align");
+            iminPrintUtils.printSingleBitmap(image, align);
+          } else {
+            iminPrintUtils.printSingleBitmap(image);
+          }
         }
       }
+
+
       promise.resolve(null);
     } catch (Exception e) {
       promise.reject("printSingleBitmap_failed", e.getMessage());
@@ -327,20 +347,36 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
       Log.d("printMultiBitmap", "config:" + config.getArray("urls"));
       ReadableArray urls = config.getArray("urls");
       ArrayList<Bitmap> bitmaps = new ArrayList<Bitmap>();
-      for (int i = 0; i < urls.size(); i++) {
-        bitmaps.add(Glide.with(reactContext).asBitmap().load(urls.getString(i)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).submit().get());
+      if (config.hasKey("width") && config.hasKey("height")) {
+        int width = config.getInt("width");
+        int height = config.getInt("height");
+        for (int i = 0; i < urls.size(); i++) {
+          bitmaps.add(Glide.with(reactContext).asBitmap().load(urls.getString(i)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).submit(width, height).get());
+        }
+        if (iminPrintUtils != null) {
+          if (config.hasKey("align")) {
+            int align = config.getInt("align");
+            iminPrintUtils.printMultiBitmap(bitmaps, align);
+          } else {
+            iminPrintUtils.printMultiBitmap(bitmaps, 0);
+          }
+        }
+      } else {
+        for (int i = 0; i < urls.size(); i++) {
+          bitmaps.add(Glide.with(reactContext).asBitmap().load(urls.getString(i)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).submit().get());
+        }
+        if (iminPrintUtils != null) {
+          if (config.hasKey("align")) {
+            int align = config.getInt("align");
+            iminPrintUtils.printMultiBitmap(bitmaps, align);
+          } else {
+            iminPrintUtils.printMultiBitmap(bitmaps, 0);
+          }
+        }
       }
       // // if (image.isRecycled()) {
       // //   return;
       // // }
-      if (iminPrintUtils != null) {
-        if (config.hasKey("align")) {
-          int align = config.getInt("align");
-          iminPrintUtils.printMultiBitmap(bitmaps, align);
-        } else {
-          iminPrintUtils.printMultiBitmap(bitmaps, 0);
-        }
-      }
       promise.resolve(null);
     } catch (Exception e) {
       promise.reject("printMultiBitmap_failed", e.getMessage());
@@ -351,13 +387,27 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
   public void printSingleBitmapBlackWhite(ReadableMap config, final Promise promise) {
     try {
       String url = config.getString("url");
-      Bitmap image = Glide.with(reactContext).asBitmap().load(url).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).submit().get();
-      Log.d("printSingleBitmap", "image:" + image);
-      if (image.isRecycled()) {
-        return;
-      }
-      if (iminPrintUtils != null) {
-        iminPrintUtils.printSingleBitmapBlackWhite(image);
+      if (config.hasKey("width") && config.hasKey("height")) {
+        int width = config.getInt("width");
+        int height = config.getInt("height");
+        Bitmap image = Glide.with(reactContext).asBitmap().load(url).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).submit(width, height).get();
+        if (image.isRecycled()) {
+          return;
+        }
+        Log.d("printSingleBitmap", "image:" + image);
+        if (iminPrintUtils != null) {
+          iminPrintUtils.printSingleBitmapBlackWhite(image);
+        }
+      } else {
+        Bitmap image = Glide.with(reactContext).asBitmap().load(url).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).submit().get();
+        if (image.isRecycled()) {
+          return;
+        }
+        Log.d("printSingleBitmap", "image:" + image);
+
+        if (iminPrintUtils != null) {
+          iminPrintUtils.printSingleBitmapBlackWhite(image);
+        }
       }
       promise.resolve(null);
     } catch (Exception e) {

@@ -148,10 +148,10 @@ export default function App() {
   };
   const handlerPrintMultiBitmap = () => {
     getMediaFilePermission();
-    PrinterImin.printMultiBitmap([
-      require('./logo.png'),
-      require('./logo.png'),
-    ]);
+    PrinterImin.printMultiBitmap(
+      [require('./logo.png'), require('./logo.png')],
+      { align: IminPrintAlign.center, width: 220, height: 40 }
+    );
   };
   const handlerPrintSingleBitmapBlackWhite = () => {
     getMediaFilePermission();

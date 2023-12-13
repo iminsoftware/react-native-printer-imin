@@ -93,6 +93,10 @@ export interface IminQrCodeStyle {
   errorCorrectionLevel?: IminQrcodeCorrectionLevel;
 }
 
+export interface IminPictureStyle extends IminBaseStyle {
+  align?: IminPrintAlign;
+}
+
 export type IminPrinterType = {
   initPrinter: () => Promise<string>;
   getPrinterStatus: () => Promise<{ code: number; message: string }>;
@@ -118,14 +122,15 @@ export type IminPrinterType = {
   partialCut: () => Promise<void>;
   printSingleBitmap: (
     uri: string | ImageSourcePropType,
-    align?: IminPrintAlign
+    pictureStyle?: IminPictureStyle
   ) => Promise<void>;
   printMultiBitmap: (
     imgs: (string | ImageSourcePropType)[],
-    align?: IminPrintAlign
+    pictureStyle?: IminPictureStyle
   ) => Promise<void>;
   printSingleBitmapBlackWhite: (
-    uri: string | ImageSourcePropType
+    uri: string | ImageSourcePropType,
+    baseStyle?: IminBaseStyle
   ) => Promise<void>;
   setQrCodeSize: (qrSize: number) => Promise<void>;
   setLeftMargin: (margin: number) => Promise<void>;

@@ -624,6 +624,19 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void openCashBox(final Promise promise) {
+     try {
+       if (iminPrintUtils != null) {
+         iminPrintUtils.openCashBox();
+       }
+       promise.resolve(null);
+     } catch (Exception e) {
+      promise.reject("openCashBox_failed", e.getMessage());
+    }
+
+  }
+
+  @ReactMethod
   public void setInitIminPrinter(boolean isDefault, final Promise promise) {
     try {
       if (iminPrintUtils != null) {

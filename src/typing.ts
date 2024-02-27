@@ -1,4 +1,5 @@
 import type { ImageSourcePropType } from 'react-native';
+
 export enum IminTypeface {
   Default = 0,
   Monospace = 1,
@@ -96,8 +97,13 @@ export interface IminQrCodeStyle {
 export interface IminPictureStyle extends IminBaseStyle {
   align?: IminPrintAlign;
 }
-
+// Promise<{ eventName: string; eventData: any }>
 export type IminPrinterType = {
+  receiveBroadcastStream: {
+    listen: (
+      callBackHandle: (payload: { eventName: string; eventData: any }) => void
+    ) => () => void;
+  };
   initPrinter: () => Promise<string>;
   getPrinterStatus: () => Promise<{ code: number; message: string }>;
   setTextSize: (size: number) => Promise<void>;

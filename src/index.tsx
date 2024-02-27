@@ -1,14 +1,16 @@
 import {
   NativeModules,
   Platform,
+  NativeEventEmitter,
   Image,
   type ImageSourcePropType,
   type ImageResolvedAssetSource,
 } from 'react-native';
-import type { IminPrinterType, IminTextStyle } from './typing';
+
 import {
   IminPrintAlign,
   IminTypeface,
+  IminPrinterType,
   IminFontStyle,
   IminQrcodeCorrectionLevel,
   IminBarCodeToBitmapFormat,
@@ -19,6 +21,7 @@ import {
   IminDoubleQRCodeStyle,
   IminPictureStyle,
   IminBaseStyle,
+  IminTextStyle,
 } from './typing';
 export {
   IminPrintAlign,
@@ -52,6 +55,23 @@ const PrinterImin = NativeModules.PrinterImin
     );
 
 const PrinterSDK: IminPrinterType = {
+  receiveBroadcastStream: {
+    listen(
+      callBackHandle: (payload: { eventName: string; eventData: any }) => void
+    ) {
+      PrinterImin.getUsePrinterSdkVersion();
+      const eventEmitter = new NativeEventEmitter(NativeModules.PrinterImin);
+      const eventListener = eventEmitter.addListener(
+        'eventBroadcast',
+        (payload: { eventName: string; eventData: any }) => {
+          callBackHandle(payload);
+        }
+      );
+      return () => {
+        eventListener.remove();
+      };
+    },
+  },
   initPrinter: PrinterImin.initPrinter,
   getPrinterStatus: PrinterImin.getPrinterStatus,
   setTextSize: PrinterImin.setTextSize,

@@ -11,7 +11,7 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
@@ -24,17 +24,18 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 
 import com.facebook.react.module.annotations.ReactModule;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 
+import com.imin.library.IminSDKManager;
 import com.imin.library.SystemPropManager;
+import com.imin.printer.INeoPrinterCallback;
 import com.imin.printer.PrinterHelper;
 import com.imin.printerlib.Callback;
 import com.imin.printerlib.IminPrintUtils;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,17 +45,31 @@ import org.json.JSONObject;
 
 import org.json.JSONException;
 
+import java.lang.RuntimeException;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.BroadcastReceiver;
+
 @ReactModule(name = PrinterIminModule.NAME)
 public class PrinterIminModule extends ReactContextBaseJavaModule {
   private final ReactApplicationContext reactContext;
   public static final String NAME = "PrinterImin";
   private IminPrintUtils iminPrintUtils;
-  private IminPrintUtils.PrintConnectType connectType = IminPrintUtils.PrintConnectType.SPI;
+  private String[] modelArry = {"W27_Pro", "I23M01", "I23M02", "I23D01", "D4-503 Pro", "D4-504 Pro", "D4-505 Pro", "MS2-11", "MS2-12", "MS1-15"};
+  private static final String ACTION_PRITER_STATUS_CHANGE = "com.imin.printerservice.PRITER_STATUS_CHANGE";
+  private static final String ACTION_POGOPIN_STATUS_CHANGE = "com.imin.printerservice.PRITER_CONNECT_STATUS_CHANGE";
+  private static final String ACTION_PRITER_STATUS = "status";
+  private IminPrintUtils.PrintConnectType connectType = IminPrintUtils.PrintConnectType.USB;
+  private static final String TAG = "IminPrinterReactNativePlugin";
+  private BroadcastReceiver mBroadcastReceiver;
 
   public PrinterIminModule(ReactApplicationContext reactContext) {
     super(reactContext);
     this.reactContext = reactContext;
-    if (Build.MODEL.equals("W27_Pro") || Build.MODEL.equals("I23D01") || Build.MODEL.equals("I23M01") || Build.MODEL.equals("I23M02")) {
+    List<String> modelList = Arrays.asList(modelArry);
+    if (modelList.contains(Build.MODEL)) {
       //初始化 2.0 的 SDK。
       PrinterHelper.getInstance().initPrinterService(reactContext);
     } else {
@@ -68,6 +83,7 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
       }
       iminPrintUtils.resetDevice();
     }
+    initializeBroadcastReceiver();
   }
 
   @Override
@@ -76,12 +92,22 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
     return NAME;
   }
 
+  private void sendEvent(ReactContext reactContext, String eventName, @Nullable WritableMap params) {
+
+    try {
+      reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, params);
+    } catch (RuntimeException e) {
+      Log.e(TAG, "java.lang.RuntimeException: Trying to invoke JS before CatalystInstance has been set!", e);
+    }
+  }
 
   @ReactMethod
   public void initPrinter(final Promise promise) {
     try {
       if (iminPrintUtils != null) {
         iminPrintUtils.initPrinter(connectType);
+      } else {
+        PrinterHelper.getInstance().initPrinter(reactContext.getPackageName(), null);
       }
       promise.resolve(true);
     } catch (Exception e) {
@@ -91,24 +117,39 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void getPrinterStatus(final Promise promise) {
-    WritableMap payload = Arguments.createMap();
-    if (iminPrintUtils != null) {
-      if (connectType.equals(IminPrintUtils.PrintConnectType.SPI)) {
-        iminPrintUtils.getPrinterStatus(connectType, new Callback() {
-          @Override
-          public void callback(int status) {
+     try {
+        WritableMap payload = Arguments.createMap();
+        if (iminPrintUtils != null) {
+          if (connectType.equals(IminPrintUtils.PrintConnectType.SPI)) {
+            Log.d(TAG, "SPI");
+            iminPrintUtils.getPrinterStatus(connectType, new Callback() {
+              @Override
+              public void callback(int status) {
+                payload.putString("message", getPrinterStatusText(status));
+                payload.putString("code", String.format("%d", status));
+                promise.resolve(payload);
+              }
+            });
+          } else {
+            Log.d(TAG, "USB");
+            int status = iminPrintUtils.getPrinterStatus(connectType);
             payload.putString("message", getPrinterStatusText(status));
             payload.putString("code", String.format("%d", status));
             promise.resolve(payload);
           }
-        });
-      } else {
-        int status = iminPrintUtils.getPrinterStatus(connectType);
-        payload.putString("message", getPrinterStatusText(status));
-        payload.putString("code", String.format("%d", status));
-        promise.resolve(payload);
-      }
-    }
+        } else {
+          int status = PrinterHelper.getInstance().getPrinterStatus();
+          payload.putString("message", getPrinterStatusText(status));
+          payload.putString("code", String.format("%d", status));
+          promise.resolve(payload);
+        }
+        // payload.putString("message", "sdsd");
+        // payload.putString("code", "1");
+        // promise.resolve(payload);
+     } catch (Exception e) {
+      promise.reject("getPrinterStatus_failed", e.getMessage());
+     }
+
   }
 
   @ReactMethod
@@ -306,7 +347,6 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
         int width = config.getInt("width");
         int height = config.getInt("height");
         Bitmap image = Glide.with(reactContext).asBitmap().load(url).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).submit(width, height).get();
-        Log.d("printSingleBitmap", "image:" + image);
         if (image.isRecycled()) {
           return;
         }
@@ -320,7 +360,6 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
         }
       } else {
         Bitmap image = Glide.with(reactContext).asBitmap().load(url).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).submit().get();
-        Log.d("printSingleBitmap", "image:" + image);
         if (image.isRecycled()) {
           return;
         }
@@ -344,7 +383,6 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void printMultiBitmap(ReadableMap config, final Promise promise) {
     try {
-      Log.d("printMultiBitmap", "config:" + config.getArray("urls"));
       ReadableArray urls = config.getArray("urls");
       ArrayList<Bitmap> bitmaps = new ArrayList<Bitmap>();
       if (config.hasKey("width") && config.hasKey("height")) {
@@ -394,7 +432,6 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
         if (image.isRecycled()) {
           return;
         }
-        Log.d("printSingleBitmap", "image:" + image);
         if (iminPrintUtils != null) {
           iminPrintUtils.printSingleBitmapBlackWhite(image);
         }
@@ -403,8 +440,6 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
         if (image.isRecycled()) {
           return;
         }
-        Log.d("printSingleBitmap", "image:" + image);
-
         if (iminPrintUtils != null) {
           iminPrintUtils.printSingleBitmapBlackWhite(image);
         }
@@ -625,12 +660,12 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void openCashBox(final Promise promise) {
-     try {
-       if (iminPrintUtils != null) {
-         iminPrintUtils.openCashBox();
-       }
-       promise.resolve(null);
-     } catch (Exception e) {
+    try {
+      if (iminPrintUtils != null) {
+        // IminSDKManager.openCashBox();
+      }
+      promise.resolve(null);
+    } catch (Exception e) {
       promise.reject("openCashBox_failed", e.getMessage());
     }
 
@@ -659,6 +694,44 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
     }
   }
 
+  private BroadcastReceiver createChargingStateBroadcastReceiver() {
+    return new BroadcastReceiver() {
+      @Override
+      public void onReceive(Context context, Intent intent) {
+        int status = intent.getIntExtra(ACTION_PRITER_STATUS, -1);
+        Log.d(TAG, "打印机状态：" + intent.getAction());
+        // 发送事件到React Native
+        if (intent.getAction().equals(ACTION_PRITER_STATUS_CHANGE)) {
+          WritableMap result = Arguments.createMap();
+          result.putInt("eventData", status);
+          result.putString("eventName", "printer_status");
+          sendEvent(reactContext, "eventBroadcast", result);
+        }
+      }
+    };
+  }
+  private void initializeBroadcastReceiver() {
+    IntentFilter intentFilter = new IntentFilter();
+    mBroadcastReceiver = createChargingStateBroadcastReceiver();
+    intentFilter.addAction(ACTION_PRITER_STATUS_CHANGE);
+    intentFilter.addAction(ACTION_POGOPIN_STATUS_CHANGE);
+    getReactApplicationContext().registerReceiver(mBroadcastReceiver, intentFilter);
+  }
+
+  @ReactMethod
+  private void getUsePrinterSdkVersion() {
+    WritableMap result = Arguments.createMap();
+    result.putString("eventName", "printer_sdk_version");
+    List<String> modelList = Arrays.asList(modelArry);
+    if (modelList.contains(Build.MODEL)) {
+      //初始化 2.0 的 SDK。
+      result.putBoolean("eventData", true);
+    } else {
+      //初始化 1.0 SDK
+      result.putBoolean("eventData", false);
+    }
+    sendEvent(reactContext, "eventBroadcast", result);
+  }
   private String getPrinterStatusText(int code) {
     if (code == 0) {
       return "Printer is normal!";

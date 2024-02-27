@@ -81,7 +81,7 @@ android {
         versionCode 1
         versionName "1.0"
     }
-    signingConfigs {
+     signingConfigs {
         debug {
             storeFile file('debug.keystore')
             storePassword 'android'

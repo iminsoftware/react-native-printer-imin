@@ -1,45 +1,65 @@
 import * as React from 'react';
-import { PermissionsAndroid, type Permission } from 'react-native';
 import { Provider } from '@fruits-chain/react-native-xiaoshu';
 import PrinterImin from 'react-native-printer-imin';
-import NewHome from './views/v2';
-import Home from './views/v1';
-
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import NewHomePage from './views/v2';
+import PrinterInfoPage from './views/v2/PrinterInfo';
+import CashBoxInfoPage from './views/v2/CashBoxInfo';
+import TransactionPage from './views/v2/Transaction';
+import HomePage from './views/v1';
+const Stack = createNativeStackNavigator();
 export default function App() {
   const [sdkVersion, setSdkVersion] = React.useState<boolean>(false);
+  const [printerStatus, setPrinterStatus] = React.useState<{
+    code: string;
+    message: string;
+  }>();
   React.useEffect(() => {
     const close = PrinterImin.receiveBroadcastStream.listen((payload) => {
       console.log(payload.eventData, payload.eventName);
       if (payload.eventName === 'printer_sdk_version') {
         setSdkVersion(payload.eventData);
+      } else if (payload.eventName === 'printer_status') {
+        setPrinterStatus(payload.eventData);
+        console.log(printerStatus);
       }
     });
     return () => {
       close();
     };
-  }, []);
-  const getMediaFilePermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-      ] as Permission[]);
-      if (
-        granted['android.permission.READ_EXTERNAL_STORAGE'] ===
-        PermissionsAndroid.RESULTS.granted
-      ) {
-        console.log('You can use the read External Storage');
-      }
-      if (
-        granted['android.permission.WRITE_EXTERNAL_STORAGE'] ===
-        PermissionsAndroid.RESULTS.granted
-      ) {
-        console.log('You can use the write External Storage');
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
-  getMediaFilePermission();
-  return <Provider>{sdkVersion ? <NewHome /> : <Home />}</Provider>;
+  }, [printerStatus, sdkVersion]);
+  return (
+    <Provider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Home">
+          {sdkVersion ? (
+            <>
+              <Stack.Screen
+                name="Home"
+                options={{
+                  title: 'v2 Printer API',
+                }}
+              >
+                {(props) => {
+                  return (
+                    <NewHomePage {...props} printerStatus={printerStatus} />
+                  );
+                }}
+              </Stack.Screen>
+              <Stack.Screen name="PrinterInfo" component={PrinterInfoPage} />
+              <Stack.Screen name="CashBoxInfo" component={CashBoxInfoPage} />
+              <Stack.Screen name="Transaction" component={TransactionPage} />
+            </>
+          ) : (
+            <Stack.Screen
+              name="Home"
+              component={HomePage}
+              options={{ title: 'v1 Printer API' }}
+            />
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
+  );
 }

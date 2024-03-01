@@ -1,5 +1,3 @@
-import type { ImageSourcePropType } from 'react-native';
-
 export enum IminTypeface {
   Default = 0,
   Monospace = 1,
@@ -40,7 +38,8 @@ export enum IminBarcodeType {
   code39 = 4,
   itf = 5,
   codabar = 6,
-  code128 = 73,
+  code93 = 7,
+  code128 = 8,
 }
 
 export enum IminBarCodeToBitmapFormat {
@@ -81,6 +80,19 @@ export interface IminTextStyle {
   align?: IminPrintAlign;
 }
 
+export interface IminTextPictureStyle {
+  wordWrap?: boolean;
+  fontSize?: number;
+  typeface?: IminTypeface;
+  fontStyle?: IminFontStyle;
+  align?: IminPrintAlign;
+  letterSpacing?: number;
+  underline?: boolean;
+  throughline?: boolean;
+  lineHeight?: number;
+  reverseWhite?: boolean;
+}
+
 export interface IminDoubleQRCodeStyle {
   text: string;
   level?: number;
@@ -97,7 +109,6 @@ export interface IminQrCodeStyle {
 export interface IminPictureStyle extends IminBaseStyle {
   align?: IminPrintAlign;
 }
-// Promise<{ eventName: string; eventData: any }>
 export type IminPrinterType = {
   receiveBroadcastStream: {
     listen: (
@@ -111,8 +122,8 @@ export type IminPrinterType = {
   setTextStyle: (style: number) => Promise<void>;
   setAlignment: (align: number) => Promise<void>;
   setTextLineSpacing: (spacing: number) => Promise<void>;
-  printText: (text: string, style?: IminTextStyle) => void;
-  printAntiWhiteText: (text: string, style?: IminTextStyle) => void;
+  printText: (text: string, style?: IminTextStyle) => Promise<void>;
+  printAntiWhiteText: (text: string, style?: IminTextStyle) => Promise<void>;
   setTextWidth: (width: number) => Promise<void>;
   printAndLineFeed: () => Promise<void>;
   printAndFeedPaper: (height: number) => Promise<void>;
@@ -127,15 +138,15 @@ export type IminPrinterType = {
   setPageFormat: (style?: number) => Promise<void>;
   partialCut: () => Promise<void>;
   printSingleBitmap: (
-    uri: string | ImageSourcePropType,
+    uri: string,
     pictureStyle?: IminPictureStyle
   ) => Promise<void>;
   printMultiBitmap: (
-    imgs: (string | ImageSourcePropType)[],
+    imgs: string[],
     pictureStyle?: IminPictureStyle
   ) => Promise<void>;
   printSingleBitmapBlackWhite: (
-    uri: string | ImageSourcePropType,
+    uri: string,
     baseStyle?: IminBaseStyle
   ) => Promise<void>;
   setQrCodeSize: (qrSize: number) => Promise<void>;
@@ -151,6 +162,7 @@ export type IminPrinterType = {
     barCodeContent: string,
     style?: IminBarCodeStyle
   ) => Promise<void>;
+  openCashBox: () => Promise<void>;
   setDoubleQRSize: (size: number) => Promise<void>;
   setDoubleQR1Level: (level: number) => Promise<void>;
   setDoubleQR2Level: (level: number) => Promise<void>;
@@ -166,4 +178,65 @@ export type IminPrinterType = {
   ) => Promise<void>;
   setInitIminPrinter: (isDefaultPrinter: boolean) => Promise<void>;
   resetDevice: () => Promise<void>;
+  // 2.0
+  getFontCodepage: () => Promise<string[]>;
+  setFontCodepage: (codepage: number) => Promise<void>;
+  getCurCodepage: () => Promise<string>;
+  getEncodeList: () => Promise<string[]>;
+  setPrinterEncode: (encode: number) => Promise<void>;
+  getCurEncode: () => Promise<string>;
+  getPrinterDensityList: () => Promise<string[]>;
+  setPrinterDensity: (density: number) => Promise<void>;
+  getPrinterDensity: () => Promise<number>;
+  getPrinterSpeedList: () => Promise<string[]>;
+  setPrinterSpeed: (speed: number) => Promise<void>;
+  getPrinterSpeed: () => Promise<number>;
+  getPrinterPaperTypeList: () => Promise<string[]>;
+  getPrinterPaperType: () => Promise<number>;
+  getPrinterSerialNumber: () => Promise<string>;
+  getPrinterModelName: () => Promise<string>;
+  getPrinterThermalHead: () => Promise<string>;
+  getPrinterFirmwareVersion: () => Promise<string>;
+  getServiceVersion: () => Promise<string>;
+  getPrinterHardwareVersion: () => Promise<string>;
+  getUsbPrinterVidPid: () => Promise<string>;
+  getUsbDevicesName: () => Promise<string>;
+  getPrinterPaperDistance: () => Promise<number>;
+  getPrinterCutTimes: () => Promise<string>;
+  getPrinterMode: () => Promise<number>;
+  getDrawerStatus: () => Promise<boolean>;
+  getOpenDrawerTimes: () => Promise<number>;
+  printSingleBitmapColorChart: (
+    uri: string,
+    pictureStyle?: IminPictureStyle
+  ) => Promise<void>;
+  printerSelfChecking: () => Promise<void>;
+  sendRAWData: (bytes: number[]) => Promise<void>;
+  initPrinterParams: () => Promise<void>;
+  unBindService: () => Promise<void>;
+  fullCut: () => Promise<void>;
+  printColumnsString: (
+    cols: {
+      text: string;
+      width: number;
+      align: IminPrintAlign;
+      fontSize: number;
+    }[]
+  ) => Promise<void>;
+  setCodeAlignment: (align: IminPrintAlign) => Promise<void>;
+  setTextBitmapTypeface: (typeface: IminTypeface) => Promise<void>;
+  setTextBitmapSize: (size: number) => Promise<void>;
+  setTextBitmapStyle: (style: IminFontStyle) => Promise<void>;
+  setTextBitmapStrikeThru: (strikeThru: boolean) => Promise<void>;
+  setTextBitmapUnderline: (haveUnderline: boolean) => Promise<void>;
+  setTextBitmapLineSpacing: (lineHeight: number) => Promise<void>;
+  setTextBitmapLetterSpacing: (space: number) => Promise<void>;
+  setTextBitmapAntiWhite: (antiWhite: boolean) => Promise<void>;
+  printTextBitmap: (
+    text: string,
+    style?: IminTextPictureStyle
+  ) => Promise<void>;
+  enterPrinterBuffer: (isClean: boolean) => Promise<void>;
+  commitPrinterBuffer: () => Promise<void>;
+  exitPrinterBuffer: (isCommit: boolean) => Promise<void>;
 };

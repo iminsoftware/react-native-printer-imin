@@ -94,9 +94,10 @@ dependencies {
   // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
+  implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
   implementation files('libs/IminLibs1.0.15.jar')
   implementation files('libs/IminStraElectronicSDK_V1.2.jar')
-  implementation files('libs/iminPrinterSDK-10_V1.0.9_2306201823.jar')
+  implementation files('libs/iminPrinterSDK-12_V1.2.0_2401251422.jar')
   implementation 'com.github.iminsoftware:IminPrinterLibrary:V1.0.0.11'
   implementation 'com.github.bumptech.glide:glide:4.16.0'
   annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'

@@ -7,6 +7,7 @@ import NewHomePage from './views/v2';
 import PrinterInfoPage from './views/v2/PrinterInfo';
 import CashBoxInfoPage from './views/v2/CashBoxInfo';
 import TransactionPage from './views/v2/Transaction';
+import PrintTextPage from './views/v2/PrintText';
 import HomePage from './views/v1';
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -50,6 +51,7 @@ export default function App() {
               <Stack.Screen name="PrinterInfo" component={PrinterInfoPage} />
               <Stack.Screen name="CashBoxInfo" component={CashBoxInfoPage} />
               <Stack.Screen name="Transaction" component={TransactionPage} />
+              <Stack.Screen name="PrintText" component={PrintTextPage} />
             </>
           ) : (
             <Stack.Screen

@@ -16,7 +16,7 @@ import {
 import { InfoCircleOutline } from '@fruits-chain/icons-react-native';
 import PrinterImin, {
   IminPrintAlign,
-  IminTypeface,
+  // IminTypeface,
   IminQrcodeCorrectionLevel,
   IminBarcodeType,
   IminBarcodeTextPos,
@@ -176,20 +176,10 @@ export default function NewHome({
                 <Text
                   style={styles.item}
                   onPress={() => {
-                    PrinterImin.printTextBitmap(
-                      'iMin advocates the core values of "Integrity, Customer First, Invention&Creation, Patience”, using cloud-based technology to help businesses to get  access to the Internet and also increases their data base, by providing more solutions so that their business can take a step further. Through their efficiency enhancement, cost improvement, service innovation, and  better services for consumers, these aspect will drives the entire industry development.',
-                      {
-                        align: IminPrintAlign.center,
-                        fontSize: 30,
-                        typeface: IminTypeface.Monospace,
-                        throughline: true,
-                        underline: true,
-                      }
-                    );
-                    PrinterImin.printAndFeedPaper(70);
+                    navigation.navigate('PrintText');
                   }}
                 >
-                  printTextBitmap
+                  printText
                 </Text>
               </Col>
               <Col span={12}>

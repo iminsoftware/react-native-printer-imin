@@ -54,7 +54,6 @@ const PrinterSDK: IminPrinterType = {
     listen(
       callBackHandle: (payload: { eventName: string; eventData: any }) => void
     ) {
-      PrinterImin.getUsePrinterSdkVersion();
       const eventEmitter = new NativeEventEmitter(NativeModules.PrinterImin);
       const eventListener = eventEmitter.addListener(
         'eventBroadcast',
@@ -62,6 +61,7 @@ const PrinterSDK: IminPrinterType = {
           callBackHandle(payload);
         }
       );
+      PrinterImin.getUsePrinterSdkVersion();
       return () => {
         eventListener.remove();
       };

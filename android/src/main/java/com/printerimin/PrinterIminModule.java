@@ -232,7 +232,9 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
   public void printText(String text, final Promise promise) {
     try {
       if (iminPrintUtils != null) {
-        iminPrintUtils.printText(text);
+        iminPrintUtils.printText(text  + "\n");
+      } else {
+        PrinterHelper.getInstance().printText(text + "\n", null);
       }
       promise.resolve(null);
     } catch (Exception e) {
@@ -1502,9 +1504,9 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
         String text = config.getString("text");
         if (config.hasKey("align")) {
           int align = config.getInt("align");
-          PrinterHelper.getInstance().printTextBitmapWithAli(text, align, null);
+          PrinterHelper.getInstance().printTextBitmapWithAli(text + "\n", align, null);
         } else {
-          PrinterHelper.getInstance().printTextBitmap(text, null);
+          PrinterHelper.getInstance().printTextBitmap(text + "\n", null);
         }
       }
       promise.resolve(null);
@@ -1589,7 +1591,12 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
     }
     sendEvent(reactContext, "eventBroadcast", result);
   }
-
+  @ReactMethod
+  public void addListener(String eventName) {
+  }
+  @ReactMethod
+  public void removeListeners(Integer count) {
+  }
   private String getPrinterStatusText(int code) {
     if (code == 0) {
       return "Printer is normal!";

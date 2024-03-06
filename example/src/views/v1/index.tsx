@@ -171,22 +171,28 @@ export default function Home() {
                   onPress={() => {
                     PrinterImin.printColumnsText([
                       {
-                        text: '1',
-                        width: 1,
-                        fontSize: 26,
-                        align: IminPrintAlign.center,
-                      },
-                      {
-                        text: 'iMin',
-                        width: 2,
+                        text: '语文',
+                        width: 100,
                         fontSize: 26,
                         align: IminPrintAlign.left,
                       },
                       {
-                        text: 'iMin',
-                        width: 1,
+                        text: '88',
+                        width: 70,
                         fontSize: 26,
-                        align: IminPrintAlign.right,
+                        align: IminPrintAlign.left,
+                      },
+                      {
+                        text: 'A-',
+                        width: 50,
+                        fontSize: 26,
+                        align: IminPrintAlign.left,
+                      },
+                      {
+                        text: '陈老师',
+                        width: 120,
+                        fontSize: 26,
+                        align: IminPrintAlign.left,
                       },
                     ]);
                     PrinterImin.printAndFeedPaper(100);
@@ -235,18 +241,17 @@ export default function Home() {
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() =>
+                  onPress={() => {
                     PrinterImin.printBarCode(
                       IminBarcodeType.jan13,
                       '0123456789012',
                       {
                         align: IminPrintAlign.center,
                         position: IminBarcodeTextPos.aboveText,
-                        width: 400,
-                        height: 50,
                       }
-                    )
-                  }
+                    );
+                    PrinterImin.printAndFeedPaper(100);
+                  }}
                 >
                   printBarCode
                 </Text>
@@ -277,6 +282,22 @@ export default function Home() {
                   }
                 >
                   printDoubleQR
+                </Text>
+              </Col>
+              <Col span={12}>
+                <Text
+                  style={styles.item}
+                  onPress={() => PrinterImin.partialCut()}
+                >
+                  partialCut
+                </Text>
+              </Col>
+              <Col span={12}>
+                <Text
+                  style={styles.item}
+                  onPress={() => PrinterImin.openCashBox()}
+                >
+                  openCashBox
                 </Text>
               </Col>
             </Row>

@@ -50,6 +50,7 @@ const PrinterImin = NativeModules.PrinterImin
     );
 
 const PrinterSDK: IminPrinterType = {
+  version: PrinterImin.SDK_VERSION_IMIN as string,
   receiveBroadcastStream: {
     listen(
       callBackHandle: (payload: { eventName: string; eventData: any }) => void
@@ -61,7 +62,7 @@ const PrinterSDK: IminPrinterType = {
           callBackHandle(payload);
         }
       );
-      PrinterImin.getUsePrinterSdkVersion();
+      // PrinterImin.getUsePrinterSdkVersion();
       return () => {
         eventListener.remove();
       };

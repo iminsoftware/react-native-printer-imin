@@ -110,6 +110,7 @@ export interface IminPictureStyle extends IminBaseStyle {
   align?: IminPrintAlign;
 }
 export type IminPrinterType = {
+  version: string;
   receiveBroadcastStream: {
     listen: (
       callBackHandle: (payload: { eventName: string; eventData: any }) => void

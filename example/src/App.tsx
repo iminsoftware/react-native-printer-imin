@@ -11,7 +11,6 @@ import PrintTextPage from './views/v2/PrintText';
 import HomePage from './views/v1';
 const Stack = createNativeStackNavigator();
 export default function App() {
-  const [sdkVersion, setSdkVersion] = React.useState<boolean>(false);
   const [printerStatus, setPrinterStatus] = React.useState<{
     code: string;
     message: string;
@@ -19,9 +18,7 @@ export default function App() {
   React.useEffect(() => {
     const close = PrinterImin.receiveBroadcastStream.listen((payload) => {
       console.log(payload.eventData, payload.eventName);
-      if (payload.eventName === 'printer_sdk_version') {
-        setSdkVersion(payload.eventData);
-      } else if (payload.eventName === 'printer_status') {
+      if (payload.eventName === 'printer_status') {
         setPrinterStatus(payload.eventData);
         console.log(printerStatus);
       }
@@ -29,12 +26,13 @@ export default function App() {
     return () => {
       close();
     };
-  }, [printerStatus, sdkVersion]);
+  }, [printerStatus]);
+  console.log('version:', PrinterImin.version);
   return (
     <Provider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
-          {sdkVersion ? (
+          {PrinterImin.version === '2.0.0' ? (
             <>
               <Stack.Screen
                 name="Home"

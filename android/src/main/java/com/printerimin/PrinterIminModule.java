@@ -62,6 +62,7 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
   private String[] modelArry = {"W27_Pro", "I23M01", "I23M02", "I23D01", "D4-503 Pro", "D4-504 Pro", "D4-505 Pro", "MS2-11", "MS2-12", "MS1-15"};
   private static final String ACTION_PRITER_STATUS_CHANGE = "com.imin.printerservice.PRITER_STATUS_CHANGE";
   private static final String ACTION_POGOPIN_STATUS_CHANGE = "com.imin.printerservice.PRITER_CONNECT_STATUS_CHANGE";
+  private String sdkVersion = "1.0.0";
   private static final String ACTION_PRITER_STATUS = "status";
   private IminPrintUtils.PrintConnectType connectType = IminPrintUtils.PrintConnectType.USB;
   private static final String TAG = "IminPrinterReactNativePlugin";
@@ -74,6 +75,7 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
     if (modelList.contains(Build.MODEL)) {
       //初始化 2.0 的 SDK。
       PrinterHelper.getInstance().initPrinterService(reactContext);
+      sdkVersion = "2.0.0";
     } else {
       //初始化 1.0 SDK
       iminPrintUtils = IminPrintUtils.getInstance(reactContext);
@@ -84,6 +86,7 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
         connectType = IminPrintUtils.PrintConnectType.USB;
       }
       iminPrintUtils.resetDevice();
+      sdkVersion = "1.0.0";
     }
     initializeBroadcastReceiver();
   }
@@ -126,20 +129,20 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
           iminPrintUtils.getPrinterStatus(connectType, new Callback() {
             @Override
             public void callback(int status) {
-              payload.putString("message", getPrinterStatusText(status));
+              payload.putString("message", Utils.getInstance().getPrinterStatusText(status));
               payload.putString("code", String.format("%d", status));
               promise.resolve(payload);
             }
           });
         } else {
           int status = iminPrintUtils.getPrinterStatus(connectType);
-          payload.putString("message", getPrinterStatusText(status));
+          payload.putString("message", Utils.getInstance().getPrinterStatusText(status));
           payload.putString("code", String.format("%d", status));
           promise.resolve(payload);
         }
       } else {
         int status = PrinterHelper.getInstance().getPrinterStatus();
-        payload.putString("message", getPrinterStatusText(status));
+        payload.putString("message", Utils.getInstance().getPrinterStatusText(status));
         payload.putString("code", String.format("%d", status));
         promise.resolve(payload);
       }
@@ -232,7 +235,7 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
   public void printText(String text, final Promise promise) {
     try {
       if (iminPrintUtils != null) {
-        iminPrintUtils.printText(text  + "\n");
+        iminPrintUtils.printText(text + "\n");
       } else {
         PrinterHelper.getInstance().printText(text + "\n", null);
       }
@@ -588,16 +591,16 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
       } else {
         if (config.hasKey("align")) {
           int barCodeAlign = config.getInt("align");
-          if(config.hasKey("position") && config.hasKey("height") && config.hasKey("width")) {
-              int position = config.getInt("position");
-              int height = config.getInt("height");
-              int width = config.getInt("width");
-               PrinterHelper.getInstance().printBarCodeWithFull(barCodeContent, barCodeType, width, height, barCodeAlign, position, null);
+          if (config.hasKey("position") && config.hasKey("height") && config.hasKey("width")) {
+            int position = config.getInt("position");
+            int height = config.getInt("height");
+            int width = config.getInt("width");
+            PrinterHelper.getInstance().printBarCodeWithFull(barCodeContent, barCodeType, width, height, barCodeAlign, position, null);
           } else {
-            PrinterHelper.getInstance().printBarCodeWithAlign(barCodeContent,barCodeType, barCodeAlign, null);
+            PrinterHelper.getInstance().printBarCodeWithAlign(barCodeContent, barCodeType, barCodeAlign, null);
           }
         } else {
-          PrinterHelper.getInstance().printBarCode(barCodeContent,barCodeType, null);
+          PrinterHelper.getInstance().printBarCode(barCodeContent, barCodeType, null);
         }
       }
       promise.resolve(null);
@@ -1120,13 +1123,16 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
           @Override
           public void onRunResult(boolean isSuccess) throws RemoteException {
           }
+
           @Override
           public void onReturnString(String s) throws RemoteException {
             promise.resolve(s);
           }
+
           @Override
           public void onRaiseException(int code, String msg) throws RemoteException {
           }
+
           @Override
           public void onPrintResult(int code, String msg) throws RemoteException {
           }
@@ -1147,13 +1153,16 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
           @Override
           public void onRunResult(boolean isSuccess) throws RemoteException {
           }
+
           @Override
           public void onReturnString(String s) throws RemoteException {
             promise.resolve(s);
           }
+
           @Override
           public void onRaiseException(int code, String msg) throws RemoteException {
           }
+
           @Override
           public void onPrintResult(int code, String msg) throws RemoteException {
           }
@@ -1174,13 +1183,16 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
           @Override
           public void onRunResult(boolean isSuccess) throws RemoteException {
           }
+
           @Override
           public void onReturnString(String s) throws RemoteException {
             promise.resolve(s);
           }
+
           @Override
           public void onRaiseException(int code, String msg) throws RemoteException {
           }
+
           @Override
           public void onPrintResult(int code, String msg) throws RemoteException {
           }
@@ -1201,13 +1213,16 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
           @Override
           public void onRunResult(boolean isSuccess) throws RemoteException {
           }
+
           @Override
           public void onReturnString(String s) throws RemoteException {
             promise.resolve(s);
           }
+
           @Override
           public void onRaiseException(int code, String msg) throws RemoteException {
           }
+
           @Override
           public void onPrintResult(int code, String msg) throws RemoteException {
           }
@@ -1219,6 +1234,7 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
       promise.reject("getPrinterFirmwareVersion_failed", e.getMessage());
     }
   }
+
   @ReactMethod
   public void getPrinterHardwareVersion(final Promise promise) {
     try {
@@ -1227,13 +1243,16 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
           @Override
           public void onRunResult(boolean isSuccess) throws RemoteException {
           }
+
           @Override
           public void onReturnString(String s) throws RemoteException {
             promise.resolve(s);
           }
+
           @Override
           public void onRaiseException(int code, String msg) throws RemoteException {
           }
+
           @Override
           public void onPrintResult(int code, String msg) throws RemoteException {
           }
@@ -1245,6 +1264,7 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
       promise.reject("getPrinterHardwareVersion_failed", e.getMessage());
     }
   }
+
   @ReactMethod
   public void getPrinterPaperDistance(final Promise promise) {
     try {
@@ -1253,13 +1273,16 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
           @Override
           public void onRunResult(boolean isSuccess) throws RemoteException {
           }
+
           @Override
           public void onReturnString(String s) throws RemoteException {
             promise.resolve(s);
           }
+
           @Override
           public void onRaiseException(int code, String msg) throws RemoteException {
           }
+
           @Override
           public void onPrintResult(int code, String msg) throws RemoteException {
           }
@@ -1271,6 +1294,7 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
       promise.reject("getPrinterPaperDistance_failed", e.getMessage());
     }
   }
+
   @ReactMethod
   public void getPrinterCutTimes(final Promise promise) {
     try {
@@ -1279,13 +1303,16 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
           @Override
           public void onRunResult(boolean isSuccess) throws RemoteException {
           }
+
           @Override
           public void onReturnString(String s) throws RemoteException {
             promise.resolve(s);
           }
+
           @Override
           public void onRaiseException(int code, String msg) throws RemoteException {
           }
+
           @Override
           public void onPrintResult(int code, String msg) throws RemoteException {
           }
@@ -1301,7 +1328,7 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void getPrinterMode(final Promise promise) {
-      try {
+    try {
       if (iminPrintUtils == null) {
         promise.resolve(PrinterHelper.getInstance().getPrinterMode());
       } else {
@@ -1311,9 +1338,10 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
       promise.reject("getPrinterMode_failed", e.getMessage());
     }
   }
+
   @ReactMethod
   public void getDrawerStatus(final Promise promise) {
-      try {
+    try {
       if (iminPrintUtils == null) {
         promise.resolve(PrinterHelper.getInstance().getDrawerStatus());
       } else {
@@ -1323,9 +1351,10 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
       promise.reject("getDrawerStatus_failed", e.getMessage());
     }
   }
+
   @ReactMethod
   public void getOpenDrawerTimes(final Promise promise) {
-      try {
+    try {
       if (iminPrintUtils == null) {
         promise.resolve(PrinterHelper.getInstance().getOpenDrawerTimes());
       } else {
@@ -1335,9 +1364,10 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
       promise.reject("getOpenDrawerTimes_failed", e.getMessage());
     }
   }
+
   @ReactMethod
   public void getServiceVersion(final Promise promise) {
-      try {
+    try {
       if (iminPrintUtils == null) {
         promise.resolve(PrinterHelper.getInstance().getServiceVersion());
       } else {
@@ -1347,9 +1377,10 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
       promise.reject("getServiceVersion_failed", e.getMessage());
     }
   }
+
   @ReactMethod
   public void getUsbPrinterVidPid(final Promise promise) {
-      try {
+    try {
       if (iminPrintUtils == null) {
         promise.resolve(PrinterHelper.getInstance().getUsbPrinterVidPid());
       } else {
@@ -1359,9 +1390,10 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
       promise.reject("getUsbPrinterVidPid_failed", e.getMessage());
     }
   }
+
   @ReactMethod
   public void getUsbDevicesName(final Promise promise) {
-      try {
+    try {
       if (iminPrintUtils == null) {
         promise.resolve(PrinterHelper.getInstance().getUsbDevicesName());
       } else {
@@ -1517,34 +1549,36 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void enterPrinterBuffer(boolean isClean, final Promise promise) {
-  try {
-    if (iminPrintUtils == null) {
-      PrinterHelper.getInstance().enterPrinterBuffer(isClean);
-    }
-    promise.resolve(null);
-  } catch (Exception e) {
+    try {
+      if (iminPrintUtils == null) {
+        PrinterHelper.getInstance().enterPrinterBuffer(isClean);
+      }
+      promise.resolve(null);
+    } catch (Exception e) {
       promise.reject("enterPrinterBuffer_failed", e.getMessage());
     }
   }
+
   @ReactMethod
   public void commitPrinterBuffer(final Promise promise) {
-  try {
-    if (iminPrintUtils == null) {
-      PrinterHelper.getInstance().commitPrinterBuffer(null);
-    }
-    promise.resolve(null);
-  } catch (Exception e) {
+    try {
+      if (iminPrintUtils == null) {
+        PrinterHelper.getInstance().commitPrinterBuffer(null);
+      }
+      promise.resolve(null);
+    } catch (Exception e) {
       promise.reject("commitPrinterBuffer_failed", e.getMessage());
     }
   }
+
   @ReactMethod
   public void exitPrinterBuffer(boolean isCommit, final Promise promise) {
-  try {
-    if (iminPrintUtils == null) {
-      PrinterHelper.getInstance().exitPrinterBuffer(isCommit);
-    }
-    promise.resolve(null);
-  } catch (Exception e) {
+    try {
+      if (iminPrintUtils == null) {
+        PrinterHelper.getInstance().exitPrinterBuffer(isCommit);
+      }
+      promise.resolve(null);
+    } catch (Exception e) {
       promise.reject("exitPrinterBuffer_failed", e.getMessage());
     }
   }
@@ -1559,7 +1593,7 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
         if (intent.getAction().equals(ACTION_PRITER_STATUS_CHANGE)) {
           WritableMap result = Arguments.createMap();
           WritableMap payload = Arguments.createMap();
-          payload.putString("message", getPrinterStatusText(status));
+          payload.putString("message", Utils.getInstance().getPrinterStatusText(status));
           payload.putString("code", String.format("%d", status));
           result.putMap("eventData", payload);
           result.putString("eventName", "printer_status");
@@ -1578,46 +1612,18 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  private void getUsePrinterSdkVersion() {
-    WritableMap result = Arguments.createMap();
-    result.putString("eventName", "printer_sdk_version");
-    List<String> modelList = Arrays.asList(modelArry);
-    if (modelList.contains(Build.MODEL)) {
-      //初始化 2.0 的 SDK。
-      result.putBoolean("eventData", true);
-    } else {
-      //初始化 1.0 SDK
-      result.putBoolean("eventData", false);
-    }
-    sendEvent(reactContext, "eventBroadcast", result);
-  }
-  @ReactMethod
   public void addListener(String eventName) {
   }
+
   @ReactMethod
   public void removeListeners(Integer count) {
   }
-  private String getPrinterStatusText(int code) {
-    if (code == 0) {
-      return "Printer is normal!";
-    } else if (code == 1) {
-      return "The printer and call library do not match!";
-    } else if (code == 3) {
-      return "Print head open!";
-    } else if (code == 4) {
-      return "The cutter is not reset!!";
-    } else if (code == 5) {
-      return "Overheated!";
-    } else if (code == 6) {
-      return "Black label error!";
-    } else if (code == 7) {
-      return "Paper Jam!";
-    } else if (code == 8) {
-      return "Paper Out!";
-    } else if (code == 99) {
-      return "Other errors!";
-    } else {
-      return "Printer is not connected or powered on!";
-    }
+
+  @Override
+  public Map<String, Object> getConstants() {
+    final Map<String, Object> constants = new HashMap<>();
+    constants.put("SDK_VERSION_IMIN", sdkVersion);
+    return constants;
   }
+
 }

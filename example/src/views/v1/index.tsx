@@ -69,7 +69,7 @@ export default function Home() {
       },
     }));
   }, []);
-  const handleConfirm = React.useCallback(() => {
+  const handleConfirm = React.useCallback(async () => {
     Keyboard.dismiss();
     setDialogState((s) => ({
       ...s,
@@ -78,16 +78,15 @@ export default function Home() {
         show: false,
       },
     }));
-    PrinterImin.printText(dialogState.cDialog.value, {
+    await PrinterImin.printText(dialogState.cDialog.value, {
       fontSize: 20,
       align: IminPrintAlign.left,
       fontStyle: IminFontStyle.boldItalic,
       typeface: IminTypeface.Monospace,
     });
-    PrinterImin.printAndFeedPaper(100);
-    PrinterImin.partialCut();
+    await PrinterImin.printAndFeedPaper(100);
+    await PrinterImin.partialCut();
   }, [dialogState.cDialog.value]);
-  getMediaFilePermission();
   return (
     <>
       <ScrollView>
@@ -97,7 +96,7 @@ export default function Home() {
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => PrinterImin.initPrinter()}
+                  onPress={async () => await PrinterImin.initPrinter()}
                 >
                   initPrinter
                 </Text>
@@ -143,15 +142,15 @@ export default function Home() {
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => {
-                    PrinterImin.printAntiWhiteText(
-                      'iMin advocates the core values of "Integrity, Customer First, Invention&Creation, Patience”, using cloud-based technology to help businesses to get  access to the Internet and also increases their data base, by providing more solutions so ',
+                  onPress={async () => {
+                    await PrinterImin.printAntiWhiteText(
+                      'iMin advocates the core values of "Integrity, Customer First, Invention&Creation, Patience”.',
                       {
                         fontSize: 30,
                         align: IminPrintAlign.center,
                       }
                     );
-                    PrinterImin.printAndFeedPaper(100);
+                    await PrinterImin.printAndFeedPaper(100);
                   }}
                 >
                   printAntiWhiteText
@@ -160,7 +159,9 @@ export default function Home() {
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => PrinterImin.setTextLineSpacing(1.0)}
+                  onPress={async () =>
+                    await PrinterImin.setTextLineSpacing(1.0)
+                  }
                 >
                   setTextLineSpacing
                 </Text>
@@ -168,34 +169,48 @@ export default function Home() {
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => {
-                    PrinterImin.printColumnsText([
+                  onPress={async () => {
+                    await PrinterImin.printColumnsText([
                       {
-                        text: '语文',
-                        width: 100,
+                        text: 'Test',
+                        width: 2,
                         fontSize: 26,
                         align: IminPrintAlign.left,
                       },
                       {
-                        text: '88',
-                        width: 70,
+                        text: 'Description Description Description@48',
+                        width: 6,
                         fontSize: 26,
                         align: IminPrintAlign.left,
                       },
                       {
-                        text: 'A-',
-                        width: 50,
+                        text: '192.00',
+                        width: 2,
                         fontSize: 26,
-                        align: IminPrintAlign.left,
-                      },
-                      {
-                        text: '陈老师',
-                        width: 120,
-                        fontSize: 26,
-                        align: IminPrintAlign.left,
+                        align: IminPrintAlign.right,
                       },
                     ]);
-                    PrinterImin.printAndFeedPaper(100);
+                    await PrinterImin.printColumnsText([
+                      {
+                        text: 'Test',
+                        width: 2,
+                        fontSize: 26,
+                        align: IminPrintAlign.left,
+                      },
+                      {
+                        text: 'Description Description Description@48',
+                        width: 6,
+                        fontSize: 26,
+                        align: IminPrintAlign.left,
+                      },
+                      {
+                        text: '192.00',
+                        width: 2,
+                        fontSize: 26,
+                        align: IminPrintAlign.right,
+                      },
+                    ]);
+                    await PrinterImin.printAndFeedPaper(100);
                   }}
                 >
                   printColumnsText
@@ -204,9 +219,10 @@ export default function Home() {
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => {
-                    PrinterImin.printSingleBitmap(base64Img);
-                    PrinterImin.printAndFeedPaper(100);
+                  onPress={async () => {
+                    await getMediaFilePermission();
+                    await PrinterImin.printSingleBitmap(base64Img);
+                    await PrinterImin.printAndFeedPaper(100);
                   }}
                 >
                   printSingleBitmap
@@ -215,8 +231,9 @@ export default function Home() {
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => {
-                    PrinterImin.printMultiBitmap([base64Img, base64Img], {
+                  onPress={async () => {
+                    await getMediaFilePermission();
+                    await PrinterImin.printMultiBitmap([base64Img, base64Img], {
                       align: IminPrintAlign.center,
                       width: 220,
                       height: 40,
@@ -230,9 +247,9 @@ export default function Home() {
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => {
-                    PrinterImin.printSingleBitmapBlackWhite(base64Img);
-                    PrinterImin.printAndFeedPaper(100);
+                  onPress={async () => {
+                    await PrinterImin.printSingleBitmapBlackWhite(base64Img);
+                    await PrinterImin.printAndFeedPaper(100);
                   }}
                 >
                   printSingleBitmapBlackWhite
@@ -241,8 +258,8 @@ export default function Home() {
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => {
-                    PrinterImin.printBarCode(
+                  onPress={async () => {
+                    await PrinterImin.printBarCode(
                       IminBarcodeType.jan13,
                       '0123456789012',
                       {
@@ -250,7 +267,7 @@ export default function Home() {
                         position: IminBarcodeTextPos.aboveText,
                       }
                     );
-                    PrinterImin.printAndFeedPaper(100);
+                    await PrinterImin.printAndFeedPaper(100);
                   }}
                 >
                   printBarCode
@@ -259,8 +276,8 @@ export default function Home() {
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() =>
-                    PrinterImin.printQrCode('https://www.imin.sg', {
+                  onPress={async () =>
+                    await PrinterImin.printQrCode('https://www.imin.sg', {
                       align: IminPrintAlign.center,
                       errorCorrectionLevel: IminQrcodeCorrectionLevel.levelH,
                       qrSize: 4,
@@ -273,11 +290,11 @@ export default function Home() {
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() =>
-                    PrinterImin.printDoubleQR(
-                      { text: 'https://www.imin.sg' },
-                      { text: 'https://www.imin.sg' },
-                      5
+                  onPress={async () =>
+                    await PrinterImin.printDoubleQR(
+                      { text: '123456', level: 0, leftMargin: 10, version: 0 },
+                      { text: '123456', level: 0, leftMargin: 100, version: 6 },
+                      4
                     )
                   }
                 >
@@ -287,7 +304,7 @@ export default function Home() {
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => PrinterImin.partialCut()}
+                  onPress={async () => await PrinterImin.partialCut()}
                 >
                   partialCut
                 </Text>
@@ -295,7 +312,7 @@ export default function Home() {
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => PrinterImin.openCashBox()}
+                  onPress={async () => await PrinterImin.openCashBox()}
                 >
                   openCashBox
                 </Text>

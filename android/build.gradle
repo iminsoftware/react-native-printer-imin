@@ -95,7 +95,7 @@ dependencies {
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
   implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-  implementation files('libs/IminLibs1.0.15.jar')
+  // implementation files('libs/IminLibs1.0.15.jar')
   implementation files('libs/IminStraElectronicSDK_V1.2.jar')
   implementation files('libs/iminPrinterSDK-12_V1.2.0_2401251422.jar')
   implementation 'com.github.iminsoftware:IminPrinterLibrary:V1.0.0.11'

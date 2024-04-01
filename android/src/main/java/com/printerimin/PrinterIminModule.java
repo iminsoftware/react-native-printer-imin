@@ -28,8 +28,6 @@ import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 
-import com.imin.library.IminSDKManager;
-import com.imin.library.SystemPropManager;
 import com.imin.printer.INeoPrinterCallback;
 import com.imin.printer.PrinterHelper;
 import com.imin.printerlib.Callback;
@@ -78,13 +76,15 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
       sdkVersion = "2.0.0";
     } else {
       //初始化 1.0 SDK
+
       iminPrintUtils = IminPrintUtils.getInstance(reactContext);
-      String deviceModel = SystemPropManager.getModel();
+      String deviceModel = Utils.getInstance().getModel();
       if (deviceModel.contains("M2-203") || deviceModel.contains("M2-202") || deviceModel.contains("M2-Pro")) {
         connectType = IminPrintUtils.PrintConnectType.SPI;
       } else {
         connectType = IminPrintUtils.PrintConnectType.USB;
       }
+      iminPrintUtils.setIsOpenLog(IminPrintUtils.isOpenLog == 1 ? 0 : 1);
       iminPrintUtils.resetDevice();
       sdkVersion = "1.0.0";
     }
@@ -309,12 +309,17 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
         String textColumn = col.getString("text");
         int widthColumn = col.getInt("width");
         int alignColumn = col.getInt("align");
+         Log.d(TAG, "printColumnsText: colsText" + textColumn);
         int fontSizeColumn = col.getInt("fontSize");
         colsText[i] = textColumn;
         colsWidth[i] = widthColumn;
         colsAlign[i] = alignColumn;
         colsFontSize[i] = fontSizeColumn;
       }
+       Log.d(TAG, "printColumnsText: colsText" + colsText);
+       Log.d(TAG, "printColumnsText: colsWidth" + colsWidth);
+       Log.d(TAG, "printColumnsText: colsAlign" + colsAlign);
+       Log.d(TAG, "printColumnsText: colsFontSize" + colsFontSize);
       if (iminPrintUtils != null) {
         iminPrintUtils.printColumnsText(colsText, colsWidth, colsAlign, colsFontSize);
       } else {
@@ -772,7 +777,7 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
   public void openCashBox(final Promise promise) {
     try {
       if (iminPrintUtils != null) {
-        IminSDKManager.opencashBox();
+        Utils.getInstance().opencashBox();
       } else {
         PrinterHelper.getInstance().openDrawer();
       }

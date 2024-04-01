@@ -136,8 +136,8 @@ export default function NewHome({
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => {
-                    PrinterImin.initPrinterParams();
+                  onPress={async () => {
+                    await PrinterImin.initPrinterParams();
                   }}
                 >
                   initPrinterParams
@@ -146,12 +146,12 @@ export default function NewHome({
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => PrinterImin.openCashBox()}
+                  onPress={async () => await PrinterImin.openCashBox()}
                 >
                   openCashBox
                 </Text>
               </Col>
-              <Col span={12}>
+              {/* <Col span={12}>
                 <Text
                   style={styles.item}
                   onPress={async () => {
@@ -163,11 +163,11 @@ export default function NewHome({
                 >
                   CashBox info
                 </Text>
-              </Col>
+              </Col> */}
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => PrinterImin.printerSelfChecking()}
+                  onPress={async () => await PrinterImin.printerSelfChecking()}
                 >
                   printerSelfChecking
                 </Text>
@@ -185,7 +185,7 @@ export default function NewHome({
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => {
+                  onPress={async () => {
                     const arr = [
                       0x1b, 0x40, 0x1b, 0x4d, 0x00, 0x1b, 0x61, 0x00, 0x1d,
                       0x21, 0x11, 0x1b, 0x45, 0x00, 0x1b, 0x47, 0x00, 0x1b,
@@ -309,7 +309,7 @@ export default function NewHome({
                       0x30, 0x39, 0xc8, 0xd5, 0x20, 0x31, 0x37, 0x3a, 0x35,
                       0x30, 0x3a, 0x33, 0x30, 0x0a, 0x0a, 0x0a, 0x0a, 0x0a,
                     ];
-                    PrinterImin.sendRAWData(arr);
+                    await PrinterImin.sendRAWData(arr);
                   }}
                 >
                   sendRAWData
@@ -318,8 +318,8 @@ export default function NewHome({
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => {
-                    PrinterImin.printColumnsText([
+                  onPress={async () => {
+                    await PrinterImin.printColumnsText([
                       {
                         text: '语文',
                         width: 100,
@@ -345,7 +345,33 @@ export default function NewHome({
                         align: IminPrintAlign.left,
                       },
                     ]);
-                    PrinterImin.printAndFeedPaper(100);
+                    await PrinterImin.printColumnsText([
+                      {
+                        text: '语文',
+                        width: 100,
+                        fontSize: 26,
+                        align: IminPrintAlign.left,
+                      },
+                      {
+                        text: '88',
+                        width: 70,
+                        fontSize: 26,
+                        align: IminPrintAlign.left,
+                      },
+                      {
+                        text: 'A-',
+                        width: 50,
+                        fontSize: 26,
+                        align: IminPrintAlign.left,
+                      },
+                      {
+                        text: '陈老师',
+                        width: 120,
+                        fontSize: 26,
+                        align: IminPrintAlign.left,
+                      },
+                    ]);
+                    await PrinterImin.printAndFeedPaper(100);
                   }}
                 >
                   printColumnsText
@@ -354,8 +380,8 @@ export default function NewHome({
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => {
-                    PrinterImin.printColumnsString([
+                  onPress={async () => {
+                    await PrinterImin.printColumnsString([
                       {
                         text: '语文',
                         width: 1,
@@ -381,7 +407,7 @@ export default function NewHome({
                         align: IminPrintAlign.left,
                       },
                     ]);
-                    PrinterImin.printAndFeedPaper(100);
+                    await PrinterImin.printAndFeedPaper(100);
                   }}
                 >
                   printColumnsString
@@ -390,9 +416,9 @@ export default function NewHome({
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => {
-                    PrinterImin.printSingleBitmap(base64Img);
-                    PrinterImin.printAndFeedPaper(100);
+                  onPress={async () => {
+                    await PrinterImin.printSingleBitmap(base64Img);
+                    await PrinterImin.printAndFeedPaper(100);
                   }}
                 >
                   printSingleBitmap
@@ -401,9 +427,9 @@ export default function NewHome({
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => {
-                    PrinterImin.printMultiBitmap([base64Img, base64Img]);
-                    PrinterImin.printAndFeedPaper(100);
+                  onPress={async () => {
+                    await PrinterImin.printMultiBitmap([base64Img, base64Img]);
+                    await PrinterImin.printAndFeedPaper(100);
                   }}
                 >
                   printMultiBitmap
@@ -412,9 +438,9 @@ export default function NewHome({
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => {
-                    PrinterImin.printSingleBitmapColorChart(base64Img);
-                    PrinterImin.printAndFeedPaper(100);
+                  onPress={async () => {
+                    await PrinterImin.printSingleBitmapColorChart(base64Img);
+                    await PrinterImin.printAndFeedPaper(100);
                   }}
                 >
                   printSingleBitmapColorChart
@@ -423,8 +449,8 @@ export default function NewHome({
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() =>
-                    PrinterImin.setCodeAlignment(IminPrintAlign.right)
+                  onPress={async () =>
+                    await PrinterImin.setCodeAlignment(IminPrintAlign.right)
                   }
                 >
                   setCodeAlignment
@@ -433,9 +459,9 @@ export default function NewHome({
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => {
-                    PrinterImin.fullCut();
-                    PrinterImin.printAndFeedPaper(70);
+                  onPress={async () => {
+                    await PrinterImin.fullCut();
+                    await PrinterImin.printAndFeedPaper(70);
                   }}
                 >
                   fullCut
@@ -444,9 +470,9 @@ export default function NewHome({
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => {
-                    PrinterImin.partialCut();
-                    PrinterImin.printAndFeedPaper(70);
+                  onPress={async () => {
+                    await PrinterImin.partialCut();
+                    await PrinterImin.printAndFeedPaper(70);
                   }}
                 >
                   partialCut
@@ -455,13 +481,13 @@ export default function NewHome({
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => {
-                    PrinterImin.printQrCode('https://www.imin.sg', {
+                  onPress={async () => {
+                    await PrinterImin.printQrCode('https://www.imin.sg', {
                       align: IminPrintAlign.center,
                       errorCorrectionLevel: IminQrcodeCorrectionLevel.levelH,
                       qrSize: 4,
                     });
-                    PrinterImin.printAndFeedPaper(100);
+                    await PrinterImin.printAndFeedPaper(100);
                   }}
                 >
                   printQrCode
@@ -470,8 +496,8 @@ export default function NewHome({
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => {
-                    PrinterImin.printBarCode(
+                  onPress={async () => {
+                    await PrinterImin.printBarCode(
                       IminBarcodeType.jan13,
                       '0123456789012',
                       {
@@ -481,7 +507,7 @@ export default function NewHome({
                         height: 50,
                       }
                     );
-                    PrinterImin.printAndFeedPaper(100);
+                    await PrinterImin.printAndFeedPaper(100);
                   }}
                 >
                   printBarCode
@@ -490,8 +516,8 @@ export default function NewHome({
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={() => {
-                    PrinterImin.printDoubleQR(
+                  onPress={async () => {
+                    await PrinterImin.printDoubleQR(
                       {
                         text: 'https://www.imin.sg',
                         level: IminQrcodeCorrectionLevel.levelH,
@@ -502,7 +528,7 @@ export default function NewHome({
                       },
                       5
                     );
-                    PrinterImin.printAndFeedPaper(100);
+                    await PrinterImin.printAndFeedPaper(100);
                   }}
                 >
                   printDoubleQR

@@ -339,6 +339,10 @@ export default function PrintText() {
                 align,
                 fontSize: fontSize ? Number(fontSize) : undefined,
                 typeface,
+                letterSpacing: letterSpacing
+                  ? Number(letterSpacing)
+                  : undefined,
+                lineHeight: lineHeight ? Number(lineHeight) : undefined,
                 wordWrap: wordWrap !== -1 ? Boolean(wordWrap) : undefined,
                 reverseWhite:
                   reverseWhite !== -1 ? Boolean(reverseWhite) : undefined,

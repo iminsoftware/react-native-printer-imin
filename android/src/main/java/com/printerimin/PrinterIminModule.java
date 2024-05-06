@@ -309,17 +309,17 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
         String textColumn = col.getString("text");
         int widthColumn = col.getInt("width");
         int alignColumn = col.getInt("align");
-         Log.d(TAG, "printColumnsText: colsText" + textColumn);
+        Log.d(TAG, "printColumnsText: colsText" + textColumn);
         int fontSizeColumn = col.getInt("fontSize");
         colsText[i] = textColumn;
         colsWidth[i] = widthColumn;
         colsAlign[i] = alignColumn;
         colsFontSize[i] = fontSizeColumn;
       }
-       Log.d(TAG, "printColumnsText: colsText" + colsText);
-       Log.d(TAG, "printColumnsText: colsWidth" + colsWidth);
-       Log.d(TAG, "printColumnsText: colsAlign" + colsAlign);
-       Log.d(TAG, "printColumnsText: colsFontSize" + colsFontSize);
+      Log.d(TAG, "printColumnsText: colsText" + colsText);
+      Log.d(TAG, "printColumnsText: colsWidth" + colsWidth);
+      Log.d(TAG, "printColumnsText: colsAlign" + colsAlign);
+      Log.d(TAG, "printColumnsText: colsFontSize" + colsFontSize);
       if (iminPrintUtils != null) {
         iminPrintUtils.printColumnsText(colsText, colsWidth, colsAlign, colsFontSize);
       } else {
@@ -822,6 +822,30 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
       promise.resolve(null);
     } catch (Exception e) {
       promise.reject("printerSelfChecking_failed", e.getMessage());
+    }
+  }
+
+  @ReactMethod
+  public void openLogs(int open, final Promise promise) {
+    try {
+      if (iminPrintUtils != null) {
+        iminPrintUtils.setIsOpenLog(open);
+      }
+      promise.resolve(null);
+    } catch (Exception e) {
+      promise.reject("setIsOpenLog_failed", e.getMessage());
+    }
+  }
+
+  @ReactMethod
+  public void sendRAWDataHexStr(String byteStr, final Promise promise) {
+    try {
+      if (iminPrintUtils != null) {
+        iminPrintUtils.sendRAWData(byteStr);
+      }
+      promise.resolve(null);
+    } catch (Exception e) {
+      promise.reject("sendRAWDataHexStr_failed", e.getMessage());
     }
   }
 

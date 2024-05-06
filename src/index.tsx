@@ -388,6 +388,8 @@ const PrinterSDK: IminPrinterType = {
   enterPrinterBuffer: PrinterImin.enterPrinterBuffer,
   commitPrinterBuffer: PrinterImin.commitPrinterBuffer,
   exitPrinterBuffer: PrinterImin.exitPrinterBuffer,
+  openLogs: PrinterImin.openLogs,
+  sendRAWDataHexStr: PrinterImin.sendRAWDataHexStr,
 };
 
 export default PrinterSDK;

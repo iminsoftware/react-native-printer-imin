@@ -241,7 +241,7 @@ public class Utils {
     String cmd = "echo " + open + " > /sys/class/neostra_gpioctl/dev/gpioctl " + "\n";
     String model = getModel();
     if (model.equals("D1") || (model.equals("D1-Pro"))
-      || (model.equals("Falcon 1")) || (model.equals("I22T01"))
+      || (model.equals("Falcon 1")) || (model.equals("I22T01")) || (model.equals("TF1-11"))
       || getPlaform().equalsIgnoreCase("ums512")) {
       cmd = "echo " + open + " > /sys/extcon-usb-gpio/cashbox_en " + "\n";
     }/*else if(model.equals("Swan 1") || model.equals("DS1-11")){

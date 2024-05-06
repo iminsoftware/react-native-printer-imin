@@ -59,6 +59,7 @@ export default function Home() {
       show: false,
     },
   });
+  const [open, setOpen] = React.useState<boolean>(true);
   const closeDialog = React.useCallback(() => {
     Keyboard.dismiss();
     setDialogState((s) => ({
@@ -85,6 +86,7 @@ export default function Home() {
       typeface: IminTypeface.Monospace,
     });
     await PrinterImin.printAndFeedPaper(100);
+    await PrinterImin.sendRAWDataHexStr('0A');
     await PrinterImin.partialCut();
   }, [dialogState.cDialog.value]);
   return (
@@ -151,6 +153,7 @@ export default function Home() {
                       }
                     );
                     await PrinterImin.printAndFeedPaper(100);
+                    await PrinterImin.sendRAWDataHexStr('0A');
                   }}
                 >
                   printAntiWhiteText
@@ -190,6 +193,7 @@ export default function Home() {
                         align: IminPrintAlign.right,
                       },
                     ]);
+                    await PrinterImin.sendRAWDataHexStr('0A');
                     await PrinterImin.printColumnsText([
                       {
                         text: 'Test',
@@ -210,7 +214,9 @@ export default function Home() {
                         align: IminPrintAlign.right,
                       },
                     ]);
+                    await PrinterImin.sendRAWDataHexStr('0A');
                     await PrinterImin.printAndFeedPaper(100);
+                    await PrinterImin.sendRAWDataHexStr('0A');
                   }}
                 >
                   printColumnsText
@@ -222,7 +228,9 @@ export default function Home() {
                   onPress={async () => {
                     await getMediaFilePermission();
                     await PrinterImin.printSingleBitmap(base64Img);
+                    await PrinterImin.sendRAWDataHexStr('0A');
                     await PrinterImin.printAndFeedPaper(100);
+                    await PrinterImin.sendRAWDataHexStr('0A');
                   }}
                 >
                   printSingleBitmap
@@ -238,7 +246,9 @@ export default function Home() {
                       width: 220,
                       height: 40,
                     });
-                    PrinterImin.printAndFeedPaper(100);
+                    await PrinterImin.sendRAWDataHexStr('0A');
+                    await PrinterImin.printAndFeedPaper(100);
+                    await PrinterImin.sendRAWDataHexStr('0A');
                   }}
                 >
                   printMultiBitmap
@@ -268,6 +278,7 @@ export default function Home() {
                       }
                     );
                     await PrinterImin.printAndFeedPaper(100);
+                    await PrinterImin.sendRAWDataHexStr('0A');
                   }}
                 >
                   printBarCode
@@ -276,13 +287,14 @@ export default function Home() {
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={async () =>
+                  onPress={async () => {
                     await PrinterImin.printQrCode('https://www.imin.sg', {
                       align: IminPrintAlign.center,
                       errorCorrectionLevel: IminQrcodeCorrectionLevel.levelH,
                       qrSize: 4,
-                    })
-                  }
+                    });
+                    await PrinterImin.sendRAWDataHexStr('0A');
+                  }}
                 >
                   printQrCode
                 </Text>
@@ -290,13 +302,15 @@ export default function Home() {
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={async () =>
+                  onPress={async () => {
                     await PrinterImin.printDoubleQR(
                       { text: '123456', level: 0, leftMargin: 10, version: 0 },
                       { text: '123456', level: 0, leftMargin: 100, version: 6 },
                       4
-                    )
-                  }
+                    );
+                    await PrinterImin.printAndFeedPaper(100);
+                    await PrinterImin.sendRAWDataHexStr('0A');
+                  }}
                 >
                   printDoubleQR
                 </Text>
@@ -315,6 +329,19 @@ export default function Home() {
                   onPress={async () => await PrinterImin.openCashBox()}
                 >
                   openCashBox
+                </Text>
+              </Col>
+              <Col span={12}>
+                <Text
+                  style={styles.item}
+                  onPress={async () => {
+                    if (open) {
+                      setOpen(!open);
+                    }
+                    await PrinterImin.openLogs(Number(open));
+                  }}
+                >
+                  openLogs
                 </Text>
               </Col>
             </Row>

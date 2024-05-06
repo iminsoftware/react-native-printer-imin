@@ -240,4 +240,6 @@ export type IminPrinterType = {
   enterPrinterBuffer: (isClean: boolean) => Promise<void>;
   commitPrinterBuffer: () => Promise<void>;
   exitPrinterBuffer: (isCommit: boolean) => Promise<void>;
+  openLogs: (open: number) => Promise<void>;
+  sendRAWDataHexStr: (byteStr: string) => Promise<void>;
 };

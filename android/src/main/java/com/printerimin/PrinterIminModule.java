@@ -57,7 +57,7 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
   private final ReactApplicationContext reactContext;
   public static final String NAME = "PrinterImin";
   private IminPrintUtils iminPrintUtils;
-  private String[] modelArry = {"W27_Pro", "I23M01", "I23M02", "I23D01", "D4-503 Pro", "D4-504 Pro", "D4-505 Pro", "MS2-11", "MS2-12", "MS1-15"};
+  // private String[] modelArry = {"W27_Pro", "I23M01", "I23M02", "I23D01", "D4-503 Pro", "D4-504 Pro", "D4-505 Pro", "MS2-11", "MS2-12", "MS1-15"};
   private static final String ACTION_PRITER_STATUS_CHANGE = "com.imin.printerservice.PRITER_STATUS_CHANGE";
   private static final String ACTION_POGOPIN_STATUS_CHANGE = "com.imin.printerservice.PRITER_CONNECT_STATUS_CHANGE";
   private String sdkVersion = "1.0.0";
@@ -69,12 +69,18 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
   public PrinterIminModule(ReactApplicationContext reactContext) {
     super(reactContext);
     this.reactContext = reactContext;
-    List<String> modelList = Arrays.asList(modelArry);
-    if (modelList.contains(Build.MODEL)) {
-      //初始化 2.0 的 SDK。
-      PrinterHelper.getInstance().initPrinterService(reactContext);
-      sdkVersion = "2.0.0";
-    } else {
+    // List<String> modelList = Arrays.asList(modelArry);
+    if (Build.MODEL.contains("W27_Pro") || Build.MODEL.contains("I23D") || Build.MODEL.contains("I23M") || Build.MODEL.contains("I24D") || Build.MODEL.contains("I24T") || Build.MODEL.contains("I24M")) {
+              //初始化 2.0 的 SDK。
+            PrinterHelper.getInstance().initPrinterService(reactContext);
+            sdkVersion = "2.0.0";
+     }
+    // if (modelList.contains(Build.MODEL)) {
+    //   //初始化 2.0 的 SDK。
+    //   PrinterHelper.getInstance().initPrinterService(reactContext);
+    //   sdkVersion = "2.0.0";
+    // }
+    else {
       //初始化 1.0 SDK
 
       iminPrintUtils = IminPrintUtils.getInstance(reactContext);

@@ -97,8 +97,8 @@ dependencies {
   implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
   // implementation files('libs/IminLibs1.0.15.jar')
   implementation files('libs/IminStraElectronicSDK_V1.2.jar')
-  implementation files('libs/iminPrinterSDK-12_V1.2.0_2404031803.jar')
-  implementation 'com.github.iminsoftware:IminPrinterLibrary:V1.0.0.14'
+  implementation files('libs/iminPrinterSDK-15_V1.3.2_2411051634.jar')
+  implementation 'com.github.iminsoftware:IminPrinterLibrary:V1.0.0.15'
   implementation 'com.github.bumptech.glide:glide:4.16.0'
   annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
 }

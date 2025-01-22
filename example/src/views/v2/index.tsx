@@ -496,19 +496,23 @@ export default function NewHome({
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={async () => {
-                    await PrinterImin.printBarCode(
-                      IminBarcodeType.jan13,
-                      '0123456789012',
-                      {
-                        align: IminPrintAlign.center,
-                        position: IminBarcodeTextPos.aboveText,
-                        width: 400,
-                        height: 50,
-                      }
-                    );
-                    await PrinterImin.printAndFeedPaper(100);
-                  }}
+
+                      onPress={() => {
+                          navigation.navigate('PrintBarCode');
+                      }}
+//                   onPress={async () => {
+//                     await PrinterImin.printBarCode(
+//                       IminBarcodeType.jan13,
+//                       '0123456789012',
+//                       {
+//                         align: IminPrintAlign.center,
+//                         position: IminBarcodeTextPos.aboveText,
+//                         width: 400,
+//                         height: 50,
+//                       }
+//                     );
+//                     await PrinterImin.printAndFeedPaper(100);
+//                   }}
                 >
                   printBarCode
                 </Text>
@@ -544,6 +548,28 @@ export default function NewHome({
                   transaction printing
                 </Text>
               </Col>
+              <Col span={12}>
+                              <Text
+                                style={styles.item}
+                                onPress={async () => {
+                                  await PrinterImin.printAndFeedPaper(70);
+                                }}
+                              >
+                                printAndFeedPaper
+                              </Text>
+              </Col>
+
+              <Col span={12}>
+                                            <Text
+                                              style={styles.item}
+                                              onPress={async () => {
+                                                await PrinterImin.printAndLineFeed();
+                                              }}
+                                            >
+                                              printAndLineFeed
+                                            </Text>
+                            </Col>
+
             </Row>
           </Card>
         </Space>

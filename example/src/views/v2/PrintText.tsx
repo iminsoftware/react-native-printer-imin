@@ -41,7 +41,7 @@ export default function PrintText() {
               <TextInput
                 type="textarea"
                 value={textValue}
-                placeholder="Please enter ..."
+                placeholder="Please enter "
                 bordered
                 maxLength={1000}
                 showWordLimit
@@ -55,7 +55,7 @@ export default function PrintText() {
               <TextInput
                 value={letterSpacing}
                 onChange={(value) => setLetterSpacing(value)}
-                placeholder="Please enter ..."
+                placeholder="Please enter "
                 textAlign="right"
               />
             }
@@ -66,7 +66,7 @@ export default function PrintText() {
               <TextInput
                 value={lineHeight}
                 onChange={(value) => setLineHeight(value)}
-                placeholder="Please enter ..."
+                placeholder="Please enter "
                 textAlign="right"
               />
             }
@@ -77,7 +77,7 @@ export default function PrintText() {
               <TextInput
                 value={fontSize}
                 onChange={(value) => setFontSize(value)}
-                placeholder="Please enter ..."
+                placeholder="Please enter "
                 textAlign="right"
               />
             }

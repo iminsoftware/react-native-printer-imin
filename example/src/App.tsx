@@ -8,7 +8,9 @@ import PrinterInfoPage from './views/v2/PrinterInfo';
 import CashBoxInfoPage from './views/v2/CashBoxInfo';
 import TransactionPage from './views/v2/Transaction';
 import PrintTextPage from './views/v2/PrintText';
+import PrintBarCodePage from './views/v2/PrintBarCode';
 import HomePage from './views/v1';
+import { LanguageProvider, LanguageContext } from './LanguageContext';
 const Stack = createNativeStackNavigator();
 export default function App() {
   const [printerStatus, setPrinterStatus] = React.useState<{
@@ -30,7 +32,10 @@ export default function App() {
   console.log('version:', PrinterImin.version);
   return (
     <Provider>
-      <NavigationContainer>
+    <LanguageProvider>
+      <LanguageContext.Consumer>
+       {({ language }) => (
+       <NavigationContainer key={language} >
         <Stack.Navigator initialRouteName="Home">
           {PrinterImin.version === '2.0.0' ? (
             <>
@@ -50,6 +55,7 @@ export default function App() {
               <Stack.Screen name="CashBoxInfo" component={CashBoxInfoPage} />
               <Stack.Screen name="Transaction" component={TransactionPage} />
               <Stack.Screen name="PrintText" component={PrintTextPage} />
+              <Stack.Screen name="PrintBarCode" component={PrintBarCodePage} />
             </>
           ) : (
             <Stack.Screen
@@ -60,6 +66,9 @@ export default function App() {
           )}
         </Stack.Navigator>
       </NavigationContainer>
+      )}
+      </LanguageContext.Consumer>
+     </LanguageProvider>
     </Provider>
   );
 }

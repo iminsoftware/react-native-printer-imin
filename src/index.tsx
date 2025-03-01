@@ -16,6 +16,13 @@ import {
   IminBaseStyle,
   IminTextStyle,
   IminTextPictureStyle,
+  ShapeStyle,
+  ImageAlgorithm,
+  Rotate,
+  ErrorLevel,
+  Symbology,
+  AlignLabel,
+  HumanReadable,
 } from './typing';
 export {
   IminPrintAlign,
@@ -31,6 +38,13 @@ export {
   IminPictureStyle,
   IminBaseStyle,
   IminTextPictureStyle,
+  ShapeStyle,
+  ImageAlgorithm,
+  Rotate,
+  ErrorLevel,
+  Symbology,
+  AlignLabel,
+  HumanReadable,
 };
 const LINKING_ERROR =
   `The package 'react-native-printer-imin' doesn't seem to be linked. Make sure: \n\n` +
@@ -301,7 +315,7 @@ const PrinterSDK: IminPrinterType = {
   },
   setInitIminPrinter: PrinterImin.setInitIminPrinter,
   resetDevice: PrinterImin.resetDevice,
-  // 2.0
+  // 2.0 API
   getFontCodepage: PrinterImin.getFontCodepage,
   setFontCodepage: PrinterImin.setFontCodepage,
   getCurCodepage: PrinterImin.getCurCodepage,
@@ -390,6 +404,20 @@ const PrinterSDK: IminPrinterType = {
   exitPrinterBuffer: PrinterImin.exitPrinterBuffer,
   openLogs: PrinterImin.openLogs,
   sendRAWDataHexStr: PrinterImin.sendRAWDataHexStr,
+
+  //标签
+  labelInitCanvas: PrinterImin.labelInitCanvas,
+  labelAddText: PrinterImin.labelAddText,
+  labelAddBarCode: PrinterImin.labelAddBarCode,
+  labelAddQrCode: PrinterImin.labelAddQrCode,
+  labelAddBitmap: PrinterImin.labelAddBitmap,
+  printLabelBitmap: PrinterImin.printLabelBitmap,
+  labelAddArea: PrinterImin.labelAddArea,
+  labelPrintCanvas: PrinterImin.labelPrintCanvas,
+  labelLearning: PrinterImin.labelLearning,
+  setPrintModel: PrinterImin.setPrintModel,
+
+  //标签
 };
 
 export default PrinterSDK;

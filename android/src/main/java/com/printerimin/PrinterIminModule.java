@@ -4,8 +4,10 @@ package com.printerimin;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.os.IBinder;
 import android.os.RemoteException;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -28,8 +30,22 @@ import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 
+import com.imin.printer.ILabelPrintResult;
 import com.imin.printer.INeoPrinterCallback;
 import com.imin.printer.PrinterHelper;
+import com.imin.printer.enums.Align;
+import com.imin.printer.enums.ErrorLevel;
+import com.imin.printer.enums.HumanReadable;
+import com.imin.printer.enums.ImageAlgorithm;
+import com.imin.printer.enums.Rotate;
+import com.imin.printer.enums.Shape;
+import com.imin.printer.enums.Symbology;
+import com.imin.printer.label.LabelAreaStyle;
+import com.imin.printer.label.LabelBarCodeStyle;
+import com.imin.printer.label.LabelBitmapStyle;
+import com.imin.printer.label.LabelCanvasStyle;
+import com.imin.printer.label.LabelQrCodeStyle;
+import com.imin.printer.label.LabelTextStyle;
 import com.imin.printerlib.Callback;
 import com.imin.printerlib.IminPrintUtils;
 
@@ -63,7 +79,7 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
   private String sdkVersion = "1.0.0";
   private static final String ACTION_PRITER_STATUS = "status";
   private IminPrintUtils.PrintConnectType connectType = IminPrintUtils.PrintConnectType.USB;
-  private static final String TAG = "IminPrinterReactNativePlugin";
+  public static final String TAG = "IminPrinterReactNativePlugin";
   private BroadcastReceiver mBroadcastReceiver;
 
   public PrinterIminModule(ReactApplicationContext reactContext) {
@@ -71,10 +87,10 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
     this.reactContext = reactContext;
     // List<String> modelList = Arrays.asList(modelArry);
     if (Build.MODEL.contains("W27_Pro") || Build.MODEL.contains("I23D") || Build.MODEL.contains("I23M") || Build.MODEL.contains("I24D") || Build.MODEL.contains("I24T") || Build.MODEL.contains("I24M")) {
-              //初始化 2.0 的 SDK。
-            PrinterHelper.getInstance().initPrinterService(reactContext);
-            sdkVersion = "2.0.0";
-     }
+      //初始化 2.0 的 SDK。
+      PrinterHelper.getInstance().initPrinterService(reactContext);
+      sdkVersion = "2.0.0";
+    }
     // if (modelList.contains(Build.MODEL)) {
     //   //初始化 2.0 的 SDK。
     //   PrinterHelper.getInstance().initPrinterService(reactContext);
@@ -303,6 +319,7 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
     }
   }
 
+  @SuppressLint("LongLogTag")
   @ReactMethod
   public void printColumnsText(ReadableArray cols, final Promise promise) {
     try {
@@ -1365,7 +1382,42 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
   public void getPrinterMode(final Promise promise) {
     try {
       if (iminPrintUtils == null) {
-        promise.resolve(PrinterHelper.getInstance().getPrinterMode());
+        Log.e("IminPrinter", "getPrintModel: 获取当前打印机模式");
+//        WritableMap payload = Arguments.createMap();
+        PrinterHelper.getInstance().labelGetPrinterMode(new INeoPrinterCallback() {
+          @Override
+          public void onRunResult(boolean isSuccess) throws RemoteException {
+
+          }
+
+          @Override
+          public void onReturnString(String string) throws RemoteException {
+            Log.e("IminPrinter", "getPrintModel: 获取当前打印机模式" + string);
+            if (string != null && !string.isEmpty()) {
+//              payload.putString("result",string);
+              if (string.equalsIgnoreCase("Label")) {
+                promise.resolve(1);
+              } else {
+                promise.resolve(0);
+              }
+            }
+          }
+
+          @Override
+          public void onRaiseException(int code, String msg) throws RemoteException {
+          }
+
+          @Override
+          public void onPrintResult(int code, String msg) throws RemoteException {
+          }
+
+          @Override
+          public IBinder asBinder() {
+            return null;
+          }
+        });
+
+//        promise.resolve(PrinterHelper.getInstance().getPrinterMode());
       } else {
         promise.resolve(null);
       }
@@ -1615,6 +1667,342 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
       promise.resolve(null);
     } catch (Exception e) {
       promise.reject("exitPrinterBuffer_failed", e.getMessage());
+    }
+  }
+
+  //标签相关的API
+  //标签初始化
+  @ReactMethod
+  public void labelInitCanvas(ReadableMap config, final Promise promise) {
+    if (iminPrintUtils == null) {
+      Integer width = (Integer) config.getInt("width");
+      Integer height1 = (Integer) config.getInt("height");
+      Integer posX = (Integer) config.getInt("posX");
+      Integer posY = (Integer) config.getInt("posY");
+
+      // 使用解析后的数据
+      Log.e("IminPrinter", "labelInitCanvas:" + width + " " + height1 + " " + posX + " ,y= " + posY);
+      PrinterHelper.getInstance().labelInitCanvas(LabelCanvasStyle.getCanvasStyle()
+        .setWidth(width)
+        .setHeight(height1)
+        .setPosX(posX)
+        .setPosY(posY)
+      );
+
+      promise.resolve(true);
+    }
+  }
+
+  //绘制文本内容
+  @ReactMethod
+  public void labelAddText(ReadableMap config, final Promise promise) {
+    Log.e("IminPrinter", "labelAddText: 点击绘制文本");
+    if (iminPrintUtils == null) {
+      String textLabel = config.getString("text");
+      // 手动解析每个参数
+      Integer posX = (Integer) config.getInt("posX");
+      Integer posY = (Integer) config.getInt("posY");
+      Integer textSize = (Integer) config.getInt("textSize");
+      Integer textWidthRatio = (Integer) config.getInt("textWidthRatio");
+      Integer textHeightRatio = (Integer) config.getInt("textHeightRatio");
+      Integer width = (Integer) config.getInt("width");
+      Integer height1 = (Integer) config.getInt("height");
+      Integer alignStr = config.getInt("align");
+      Integer rotateStr = config.getInt("rotate");
+      Integer textSpace = (Integer) config.getInt("textSpace");
+      Boolean enableBold = (Boolean) config.getBoolean("enableBold");
+      Boolean enableUnderline = (Boolean) config.getBoolean("enableUnderline");
+      Boolean enableStrikethrough = (Boolean) config.getBoolean("enableStrikethrough");
+      Boolean enableItalics = (Boolean) config.getBoolean("enableItalics");
+      Boolean enAntiColor = (Boolean) config.getBoolean("enAntiColor");
+
+      // 将字符串转换为枚举类型
+      Align align = Align.values()[alignStr];
+      Rotate rotate = Rotate.values()[rotateStr];
+
+
+      Log.e("IminPrinter", "labelAddText: 点击绘制文本 " + textLabel + ",width=" +
+        width + " ,height1= " + height1 + " ,posX= " + posX + " ,posY= " + posY +
+        " ,rotateStr= " + rotateStr + " ,enableBold= " + enableBold + "  " + align + "   " + rotate);
+
+
+      PrinterHelper.getInstance().labelAddText(textLabel, LabelTextStyle.getTextStyle()
+        .setPosX(posX)
+        .setPosY(posY)
+        .setTextSize(textSize)
+        .setTextWidthRatio(textWidthRatio)
+        .setTextHeightRatio(textHeightRatio)
+        .setWidth(width)
+        .setHeight(height1)
+        .setAlign(align)
+        .setRotate(rotate)
+        .setTextSpace(textSpace)
+        .setEnableBold(enableBold)
+        .setEnableUnderline(enableUnderline)
+        .setEnableStrikethrough(enableStrikethrough)
+        .setEnableItalics(enableItalics)
+        .setEnAntiColor(enAntiColor)
+
+      );
+      promise.resolve(true);
+    }
+  }
+
+  //绘制条形码内容
+  @ReactMethod
+  public void labelAddBarCode(ReadableMap config, final Promise promise) {
+    if (iminPrintUtils == null) {
+      String barCode = config.getString("barCode");
+      // 直接从 map 获取各个属性
+      Integer posX = (Integer) config.getInt("posX");
+      Integer posY = (Integer) config.getInt("posY");
+      Integer dotWidth = (Integer) config.getInt("dotWidth");
+      Integer barHeight = (Integer) config.getInt("barHeight");
+      Integer readable = config.getInt("readable");
+      Integer symbology = config.getInt("symbology");
+      Integer alignStr = config.getInt("align");
+      Integer rotateStr = config.getInt("rotate");
+      Integer width = (Integer) config.getInt("width");
+      Integer height1 = (Integer) config.getInt("height");
+
+      Rotate rotate = Rotate.values()[rotateStr];
+      Align align = Align.values()[alignStr];
+      HumanReadable readable1 = HumanReadable.values()[readable];
+      Symbology symbology1 = Symbology.values()[symbology];
+
+      Log.e("IminPrinter", "labelAddBarCode: 绘制条形码内容 " + barCode + ",width=" +
+        width + " ,height1= " + height1 + " ,posX= " + posX + " ,posY= " + posY + " ,readable= " + readable + " ,symbology= " + symbology + "  ,HumanReadable=>   " + readable1);
+
+      PrinterHelper.getInstance().labelAddBarCode(barCode, LabelBarCodeStyle.getBarCodeStyle()
+        .setPosX(posX)
+        .setPosY(posY)
+        .setSymbology(symbology1)
+        .setDotWidth(dotWidth)
+        .setBarHeight(barHeight)
+        .setReadable(readable1)
+        .setAlign(align)
+        .setRotate(rotate)
+        .setWidth(width)
+        .setHeight(height1)
+      );
+
+      promise.resolve(true);
+    }
+
+    Log.e("IminPrinter", "labelAddBarCode: 绘制条形码内容");
+  }
+
+  //绘制二维码内容
+  @ReactMethod
+  public void labelAddQrCode(ReadableMap config, final Promise promise) {
+    Log.e("IminPrinter", "labelAddQrCode: 绘制二维码内容");
+    if (iminPrintUtils == null) {
+
+      if (config != null) {
+        String qrCode = config.getString("qrCode");
+
+        // 直接从 map 获取各个属性
+        Integer posX = (Integer) config.getInt("posX");
+        Integer posY = (Integer) config.getInt("posY");
+        Integer size1 = (Integer) config.getInt("size");
+        Integer errorLevelStr = config.getInt("errorLevel");
+        Integer rotateStr = config.getInt("rotate");
+        Integer width = (Integer) config.getInt("width");
+        Integer height1 = (Integer) config.getInt("height");
+        Log.e("IminPrinter", "labelAddQrCode: 绘制二维码内容 " + qrCode + ",width=" +
+          width + " ,height1= " + height1 + " ,posX= " + posX + " ,posY= " + posY + " ,errorLevelStr= " + errorLevelStr + " ,size= " + size1);
+
+        Rotate rotate = Rotate.values()[rotateStr];
+        ErrorLevel errorLevel = ErrorLevel.values()[errorLevelStr];
+
+
+        PrinterHelper.getInstance().labelAddQrCode(qrCode, LabelQrCodeStyle.getQrCodeStyle()
+          .setPosX(posX)
+          .setPosY(posY)
+          .setSize(size1)
+          .setErrorLevel(errorLevel)
+          .setRotate(rotate)
+          .setWidth(width)
+          .setHeight(height1)
+        );
+
+      }
+      promise.resolve(true);
+    }
+  }
+
+  //绘制图像
+  @ReactMethod
+  public void labelAddBitmap(ReadableMap config, final Promise promise) {
+    Log.e("IminPrinter", "labelAddBitmap: 绘制图像");
+    if (iminPrintUtils == null) {
+      try {
+        String bitmapUrl = config.getString("bitmapUrl");
+        Integer posX = (Integer) config.getInt("posX");
+        Integer posY = (Integer) config.getInt("posY");
+        Integer algorithm =  config.getInt("algorithm");
+        Integer value = (Integer) config.getInt("value");
+        Integer width = (Integer) config.getInt("width");
+        Integer height1 = (Integer) config.getInt("height");
+
+        ImageAlgorithm imageAlgorithm = ImageAlgorithm.values()[algorithm];
+
+        Log.e("IminPrinter", "labelAddBitmap: 绘制图像 " + bitmapUrl + " ,width=" + width + " ,height1= " + height1 + " ,posX= " + posX + " ,posY= " + posY + " ,algorithm= " + algorithm + " ,value= " + value);
+
+        Bitmap bitmap = null;
+        if (bitmapUrl == null || bitmapUrl.isEmpty()) {
+          promise.resolve(false);
+        } else {
+          bitmap = Glide.with(reactContext).asBitmap().load(bitmapUrl).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).submit(width, height1).get();
+        }
+
+        PrinterHelper.getInstance().labelAddBitmap(bitmap, LabelBitmapStyle.getBitmapStyle()
+          .setPosX(posX)
+          .setPosY(posY)
+          .setAlgorithm(imageAlgorithm)
+          .setValue(value)
+          .setWidth(width)
+          .setHeight(height1)
+        );
+        promise.resolve(true);
+      }catch (Exception e){
+        Log.e("IminPrinter", "labelAddBitmap: "+e.getMessage());
+        promise.resolve(false);
+      }
+
+    }
+  }
+
+  //打印标签样式的图片
+  @ReactMethod
+  public void printLabelBitmap(ReadableMap config, final Promise promise) {
+    Log.e("IminPrinter", "printLabelBitmap: 打印标签样式的图片");
+    if (iminPrintUtils == null) {
+
+      try {
+        String bitmapUrl = config.getString("bitmapUrl");
+        Integer width = (Integer) config.getInt("width");
+        Integer height1 = (Integer) config.getInt("height");
+
+        Log.e("IminPrinter", "labelAddArea: 绘制特殊图形 " + ",width=" +
+          width + " ,height1= " + height1 + "  ,bitmapUrl= " + bitmapUrl );
+
+        Bitmap bitmap = null;
+        if (bitmapUrl == null || bitmapUrl.isEmpty()) {
+          promise.resolve(false);
+        } else {
+          bitmap = Glide.with(reactContext).asBitmap().load(bitmapUrl).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).submit(width, height1).get();
+        }
+
+        PrinterHelper.getInstance().labelAddBitmap(bitmap, LabelBitmapStyle.getBitmapStyle()
+          .setWidth(width)
+          .setHeight(height1)
+        );
+
+        promise.resolve(true);
+
+      } catch (Exception e) {
+        Log.e("IminPrinter", "printLabelBitmap: 打印标签样式的图片 e " + e.getMessage());
+        promise.resolve(false);
+      }
+
+    }
+  }
+
+  //绘制特殊图形
+  @ReactMethod
+  public void labelAddArea(ReadableMap config, final Promise promise) {
+    if (iminPrintUtils == null) {
+      Log.e("IminPrinter", "labelAddArea: 绘制特殊图形 " + config.getInt("style"));
+      // 获取具体的参数
+      if (config != null) {
+        Integer style = config.getInt("style");
+        Integer width = (Integer) config.getInt("width");
+        Integer height1 = (Integer) config.getInt("height");
+        Integer posX = (Integer) config.getInt("posX");
+        Integer posY = (Integer) config.getInt("posY");
+        Integer endX = (Integer) config.getInt("endX");
+        Integer endY = (Integer) config.getInt("endY");
+        Integer thick = (Integer) config.getInt("thick");
+        Log.e("IminPrinter", "labelAddArea: 绘制特殊图形 " + style + ",width=" +
+          width + " ,height1= " + height1 + " ,posX= " + posX + " ,posY= " + posY + " ,endX= " + endX + " ,endY= " + endY + " ,thick= " + thick);
+        // 转换字符串到枚举
+        Shape styleShape = Shape.values()[style];
+        Log.e("IminPrinter", "labelAddArea: 绘制特殊图形 " + styleShape);
+        PrinterHelper.getInstance().labelAddArea(LabelAreaStyle.getAreaStyle()
+          .setStyle(styleShape)
+          .setWidth(width)
+          .setHeight(height1)
+          .setPosX(posX)
+          .setPosY(posY)
+          .setEndX(endX)
+          .setEndY(endY)
+          .setThick(thick));
+        promise.resolve(true);
+      }
+    }
+  }
+
+  //打印绘制的内容
+  @ReactMethod
+  public void labelPrintCanvas(int printCount, final Promise promise) {
+    if (iminPrintUtils == null) {
+      Log.e("IminPrinter", "labelPrintCanvas: 打印绘制的内容 =>" + printCount);
+      WritableMap payload = Arguments.createMap();
+      PrinterHelper.getInstance().labelPrintCanvas(printCount, new ILabelPrintResult() {
+        @Override
+        public void onResult(int resultCode, String message) throws RemoteException {
+          payload.putString("result", message);
+          payload.putInt("resultCode",resultCode);
+          promise.resolve(payload);
+        }
+
+        @Override
+        public IBinder asBinder() {
+          return null;
+        }
+      });
+    }
+  }
+
+  //标签学习
+  @ReactMethod
+  public void labelLearning(final Promise promise) {
+    if (iminPrintUtils == null) {
+      WritableMap payload = Arguments.createMap();
+      PrinterHelper.getInstance().labelPaperLearning(new INeoPrinterCallback() {
+        @Override
+        public void onRunResult(boolean isSuccess) throws RemoteException {
+
+        }
+
+        @Override
+        public void onReturnString(String s) throws RemoteException {
+          Log.e("IminPrinter", "labelLearning: 标签学习" + s);
+          payload.putString("result", s);
+          promise.resolve(payload);
+        }
+
+        @Override
+        public void onRaiseException(int code, String msg) throws RemoteException {
+
+        }
+
+        @Override
+        public void onPrintResult(int code, String msg) throws RemoteException {
+
+        }
+      });
+    }
+  }
+
+  //设置打印模式
+  @ReactMethod
+  public void setPrintModel(int printModel, final Promise promise) {
+    if (iminPrintUtils == null) {
+      Log.e("IminPrinter", "setPrintModel: 设置打印模式" + printModel);
+      PrinterHelper.getInstance().setPrinterMode(printModel);
+      promise.resolve(true);
     }
   }
 

@@ -109,6 +109,213 @@ export interface IminQrCodeStyle {
 export interface IminPictureStyle extends IminBaseStyle {
   align?: IminPrintAlign;
 }
+
+//2.0标签相关
+export enum ShapeStyle {
+  RECT_FILL,
+  RECT_WHITE,
+  RECT_REVERSE,
+  BOX,
+  CIRCLE,
+  OVAL,
+  PATH
+}
+export enum ImageAlgorithm {
+  BINARIZATION,
+  DITHERING
+}
+
+export enum Rotate {
+  ROTATE_0,
+  ROTATE_90,
+  ROTATE_180,
+  ROTATE_270
+}
+
+export enum ErrorLevel {
+  L,
+  M,
+  Q,
+  H
+}
+
+export enum Symbology {
+  UPCA,
+  UPCE,
+  EAN13,
+  EAN8,
+  CODE39,
+  ITF,
+  CODABAR,
+  CODE93,
+  CODE128
+
+}
+
+export enum AlignLabel {
+  DEFAULT,
+  LEFT,
+  CENTER,
+  RIGHT
+}
+
+export enum HumanReadable {
+  HIDE,
+  POS_ONE,
+  POS_TWO,
+  POS_THREE
+}
+
+export interface LabelAreaStyle {
+  style?: ShapeStyle;
+  width?: number;
+  height?: number;
+  posX?: number;
+  posY?: number;
+  endX?: number;
+  endY?: number;
+  thick?: number;
+}
+export const defaultLabelAreaStyle: LabelAreaStyle = {
+  style: ShapeStyle.RECT_FILL,
+  width: 50,
+  height: 50,
+  posX: 0,
+  posY: 0,
+  endX: 50,
+  endY: 50,
+  thick: 1,
+};
+
+export interface LabelBarCodeStyle {
+  barCode?: string;
+  posX?: number;
+  posY?: number;
+  dotWidth?: number;
+  barHeight?: number;
+  readable?: HumanReadable;
+  symbology?: Symbology;
+  align?: AlignLabel;
+  rotate?: Rotate;
+  width?: number;
+  height?: number;
+}
+
+export const defaultLabelBarCodeStyle: LabelBarCodeStyle = {
+  barCode: '',
+  posX: 0,
+  posY: 0,
+  dotWidth: 2,
+  barHeight: 162,
+  readable: HumanReadable.HIDE,
+  symbology: Symbology.CODE39,
+  align: AlignLabel.DEFAULT,
+  rotate: Rotate.ROTATE_0,
+  width: -1,
+  height: -1,
+};
+
+export interface LabelBitmapStyle {
+  bitmapUrl?: string;
+  posX?: number;
+  posY?: number;
+  algorithm?: ImageAlgorithm;
+  value?: number;
+  width?: number;
+  height?: number;
+}
+export const defaultLabelBitmapStyle: LabelBitmapStyle = {
+  bitmapUrl: '',
+  posX: 0,
+  posY: 0,
+  algorithm: ImageAlgorithm.BINARIZATION,
+  value: 200,
+  width: -1,
+  height: -1,
+};
+
+export interface LabelCanvasStyle {
+  width?: number;
+  height?: number;
+  posX?: number;
+  posY?: number;
+}
+
+export const defaultLabelCanvasStyle: LabelCanvasStyle = {
+  width: 50,
+  height: 50,
+  posX: 0,
+  posY: 0,
+};
+
+export interface LabelQrCodeStyle {
+  qrCode?: string;
+  posX?: number;
+  posY?: number;
+  size?: number;
+  errorLevel?: ErrorLevel;
+  rotate?: Rotate;
+  width?: number;
+  height?: number;
+}
+
+export const defaultLabelQrCodeStyle: LabelQrCodeStyle = {
+  qrCode: '',
+  posX: 0,
+  posY: 0,
+  size: 4,
+  errorLevel: ErrorLevel.L,
+  rotate: Rotate.ROTATE_0,
+  width: -1,
+  height: -1,
+};
+
+export interface LabelTextStyle {
+  text?: string;
+  posX?: number;
+  posY?: number;
+  textSize?: number;
+  textWidthRatio?: number;
+  textHeightRatio?: number;
+  width?: number;
+  height?: number;
+  align?: AlignLabel;
+  rotate?: Rotate;
+  textSpace?: number;
+  enableBold?: boolean;
+  enableUnderline?: boolean;
+  enableStrikethrough?: boolean;
+  enableItalics?: boolean;
+  enAntiColor?: boolean;
+}
+
+export const defaultLabelTextStyle: LabelTextStyle = {
+  text: '',
+  posX: 0,
+  posY: 0,
+  textSize: 24,
+  textWidthRatio: 1,
+  textHeightRatio: 1,
+  width: -1,
+  height: -1,
+  align: AlignLabel.DEFAULT,
+  rotate: Rotate.ROTATE_0,
+  textSpace: 0,
+  enableBold: false,
+  enableUnderline: false,
+  enableStrikethrough: false,
+  enableItalics: false,
+  enAntiColor: false,
+};
+
+export interface LabelPrintBitmapStyle {
+  bitmapUrl?: string;
+  width?: number;
+  height?: number;
+}
+
+//2.0标签打印相关
+
 export type IminPrinterType = {
   version: string;
   receiveBroadcastStream: {
@@ -242,4 +449,17 @@ export type IminPrinterType = {
   exitPrinterBuffer: (isCommit: boolean) => Promise<void>;
   openLogs: (open: number) => Promise<void>;
   sendRAWDataHexStr: (byteStr: string) => Promise<void>;
+
+  //标签
+  labelInitCanvas: (labelCanvasStyle: LabelCanvasStyle) => Promise<void>;
+  labelAddText: (labelTexStyle: LabelTextStyle) => Promise<void>;
+  labelAddBarCode: (labelBarCodeStyle: LabelBarCodeStyle) => Promise<void>;
+  labelAddQrCode: (labelQrCodeStyle: LabelQrCodeStyle) => Promise<void>;
+  labelAddBitmap: (labelAddBitmap: LabelBitmapStyle) => Promise<void>;
+  printLabelBitmap: (printLabelBitmap: LabelPrintBitmapStyle) => Promise<void>;
+  labelAddArea: (labelAreaStyle: LabelAreaStyle) => Promise<void>;
+  labelPrintCanvas: (printCount: number) => Promise<{ result: string, resultCode: number }>;
+  //标签学习返回值
+  labelLearning: () => Promise<{ result: string }>;
+  setPrintModel: (printModel: number) => Promise<void>;
 };

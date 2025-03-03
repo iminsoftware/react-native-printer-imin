@@ -80,3 +80,6 @@ yarn add react-native-screens@3.29.0
 
 # 执行完成之后再次执行指令
 yarn start --reset-cache
+
+20250303
+更新版本name：react-native-printer-imin：0.10.0 已发布

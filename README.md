@@ -34,8 +34,10 @@ MIT
 ---
 
 Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
-
-# 更新版本号
+# 更新0.10.3版本
+fix: adapt .so file for android 16k page, update SDK to iminPrinterSDK-15_V1.3.2_2505261539.jar
+更新内容：fix: all->适配.so文件安卓16k页面,更新SDK:iminPrinterSDK-15_V1.3.2_2505261539.jar
+# 更新版本号0.10.2
 # 更新0.10.1版本
  #  新增标签打印api
 # 编辑 package.json 文件，将 "version": "0.8.0" 更新为 "version": "0.9.0"

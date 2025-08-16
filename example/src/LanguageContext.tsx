@@ -14,7 +14,9 @@ export const LanguageContext = createContext<LanguageContextProps>({
 });
 
 export const LanguageProvider: React.FC = ({ children }) => {
-  const [language, setLanguage] = useState(RNLocalize.getLocales()[0].languageCode);
+  const [language, setLanguage] = useState(
+    RNLocalize.getLocales()[0].languageCode
+  );
 
   useEffect(() => {
     const handleLocalizationChange = () => {
@@ -29,7 +31,10 @@ export const LanguageProvider: React.FC = ({ children }) => {
     };
 
     // 监听应用状态变化
-    const subscription = AppState.addEventListener('change', handleAppStateChange);
+    const subscription = AppState.addEventListener(
+      'change',
+      handleAppStateChange
+    );
 
     // 初始化时立即执行一次
     handleLocalizationChange();

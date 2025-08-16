@@ -1,6 +1,6 @@
 {
   "name": "react-native-printer-imin",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "description": "Native Module For iMin Printer SDK Plugin",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -58,6 +58,8 @@
     "@types/jest": "^28.1.2",
     "@types/react": "~17.0.21",
     "@types/react-native": "0.70.0",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
     "commitlint": "^17.0.2",
     "del-cli": "^5.0.0",
     "eslint": "^8.4.1",

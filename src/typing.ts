@@ -118,25 +118,25 @@ export enum ShapeStyle {
   BOX,
   CIRCLE,
   OVAL,
-  PATH
+  PATH,
 }
 export enum ImageAlgorithm {
   BINARIZATION,
-  DITHERING
+  DITHERING,
 }
 
 export enum Rotate {
   ROTATE_0,
   ROTATE_90,
   ROTATE_180,
-  ROTATE_270
+  ROTATE_270,
 }
 
 export enum ErrorLevel {
   L,
   M,
   Q,
-  H
+  H,
 }
 
 export enum Symbology {
@@ -148,22 +148,21 @@ export enum Symbology {
   ITF,
   CODABAR,
   CODE93,
-  CODE128
-
+  CODE128,
 }
 
 export enum AlignLabel {
   DEFAULT,
   LEFT,
   CENTER,
-  RIGHT
+  RIGHT,
 }
 
 export enum HumanReadable {
   HIDE,
   POS_ONE,
   POS_TWO,
-  POS_THREE
+  POS_THREE,
 }
 
 export interface LabelAreaStyle {
@@ -458,7 +457,9 @@ export type IminPrinterType = {
   labelAddBitmap: (labelAddBitmap: LabelBitmapStyle) => Promise<void>;
   printLabelBitmap: (printLabelBitmap: LabelPrintBitmapStyle) => Promise<void>;
   labelAddArea: (labelAreaStyle: LabelAreaStyle) => Promise<void>;
-  labelPrintCanvas: (printCount: number) => Promise<{ result: string, resultCode: number }>;
+  labelPrintCanvas: (
+    printCount: number
+  ) => Promise<{ result: string; resultCode: number }>;
   //标签学习返回值
   labelLearning: () => Promise<{ result: string }>;
   setPrintModel: (printModel: number) => Promise<void>;

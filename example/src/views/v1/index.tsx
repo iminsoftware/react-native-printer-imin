@@ -344,6 +344,33 @@ export default function Home() {
                   openLogs
                 </Text>
               </Col>
+              <Col span={12}>
+                <Text
+                  style={styles.item}
+                  onPress={async () => {
+                    if (open) {
+                      setOpen(!open);
+                    }
+                    await PrinterImin.openLogs(Number(open));
+                  }}
+                >
+                  openLogs
+                </Text>
+              </Col>
+
+              <Col span={12}>
+                <Text
+                  style={styles.item}
+                  onPress={async () => {
+                    if (open) {
+                      setOpen(!open);
+                    }
+                    await PrinterImin.openLogs(Number(open));
+                  }}
+                >
+                  openLogs
+                </Text>
+              </Col>
             </Row>
           </Card>
         </Space>

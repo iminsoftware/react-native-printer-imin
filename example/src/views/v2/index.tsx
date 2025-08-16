@@ -18,18 +18,21 @@ import PrinterImin, {
   IminPrintAlign,
   // IminTypeface,
   IminQrcodeCorrectionLevel,
-  IminBarcodeType,
-  IminBarcodeTextPos,
   ShapeStyle,
-
 } from 'react-native-printer-imin';
 import {
-  defaultLabelAreaStyle, defaultLabelTextStyle,
-  LabelAreaStyle, LabelTextStyle, LabelBarCodeStyle, defaultLabelBarCodeStyle,
-  LabelCanvasStyle, defaultLabelCanvasStyle, LabelBitmapStyle, defaultLabelBitmapStyle,
-  LabelQrCodeStyle, defaultLabelQrCodeStyle, LabelPrintBitmapStyle,
+  defaultLabelAreaStyle,
+  defaultLabelTextStyle,
+  LabelAreaStyle,
+  LabelTextStyle,
+  LabelBarCodeStyle,
+  defaultLabelBarCodeStyle,
+  LabelCanvasStyle,
+  defaultLabelCanvasStyle,
+  LabelQrCodeStyle,
+  defaultLabelQrCodeStyle,
   Symbology,
-  HumanReadable
+  HumanReadable,
 } from '../../../../src/typing';
 
 export default function NewHome({
@@ -506,23 +509,22 @@ export default function NewHome({
               <Col span={12}>
                 <Text
                   style={styles.item}
-
                   onPress={() => {
                     navigation.navigate('PrintBarCode');
                   }}
-                //                   onPress={async () => {
-                //                     await PrinterImin.printBarCode(
-                //                       IminBarcodeType.jan13,
-                //                       '0123456789012',
-                //                       {
-                //                         align: IminPrintAlign.center,
-                //                         position: IminBarcodeTextPos.aboveText,
-                //                         width: 400,
-                //                         height: 50,
-                //                       }
-                //                     );
-                //                     await PrinterImin.printAndFeedPaper(100);
-                //                   }}
+                  //                   onPress={async () => {
+                  //                     await PrinterImin.printBarCode(
+                  //                       IminBarcodeType.jan13,
+                  //                       '0123456789012',
+                  //                       {
+                  //                         align: IminPrintAlign.center,
+                  //                         position: IminBarcodeTextPos.aboveText,
+                  //                         width: 400,
+                  //                         height: 50,
+                  //                       }
+                  //                     );
+                  //                     await PrinterImin.printAndFeedPaper(100);
+                  //                   }}
                 >
                   printBarCode
                 </Text>
@@ -604,6 +606,49 @@ export default function NewHome({
                 <Text
                   style={styles.item}
                   onPress={async () => {
+                    //标签学习返回值
+                    const info = await PrinterImin.labelLearning();
+                    if (info) {
+                      if (toastClose.current) {
+                        toastClose.current.close();
+                      }
+                      toastClose.current = Toast({
+                        type: 'icon',
+                        message: `${info.result}`,
+                        icon: <InfoCircleOutline size={40} color="#f30" />,
+                      });
+                    }
+                  }}
+                >
+                  labelLearning
+                </Text>
+              </Col>
+              <Col span={12}>
+                <Text
+                  style={styles.item}
+                  onPress={async () => {
+                    //标签学习返回值
+                    const info = await PrinterImin.labelLearning();
+                    if (info) {
+                      if (toastClose.current) {
+                        toastClose.current.close();
+                      }
+                      toastClose.current = Toast({
+                        type: 'icon',
+                        message: `${info.result}`,
+                        icon: <InfoCircleOutline size={40} color="#f30" />,
+                      });
+                    }
+                  }}
+                >
+                  labelTest
+                </Text>
+              </Col>
+
+              <Col span={12}>
+                <Text
+                  style={styles.item}
+                  onPress={async () => {
                     // 创建一个 LabelAreaStyle 对象
 
                     const labelCanvasStyle: LabelCanvasStyle = {
@@ -628,8 +673,7 @@ export default function NewHome({
                       posX: 10,
                       posY: 20,
                       enableBold: true,
-                    }
-
+                    };
 
                     const labelBarCodeStyle: LabelBarCodeStyle = {
                       ...defaultLabelBarCodeStyle,
@@ -642,7 +686,6 @@ export default function NewHome({
                       readable: HumanReadable.POS_TWO,
                     };
 
-
                     const labelQrCodeStyle: LabelQrCodeStyle = {
                       ...defaultLabelQrCodeStyle,
                       qrCode: '123456',
@@ -650,7 +693,6 @@ export default function NewHome({
                       posY: 120,
                       width: 3,
                     };
-
 
                     // try {
 
@@ -660,9 +702,6 @@ export default function NewHome({
                     // }
 
                     try {
-
-
-
                       await PrinterImin.labelInitCanvas(labelCanvasStyle);
                       await PrinterImin.labelAddText(labelTextStyle);
                       await PrinterImin.labelAddArea(labelAreaStyle);
@@ -674,7 +713,9 @@ export default function NewHome({
                         if (toastClose.current) {
                           toastClose.current.close();
                         }
-                        console.log(`${info.result}+resultCode+${info.resultCode}`);
+                        console.log(
+                          `${info.result}+resultCode+${info.resultCode}`
+                        );
                         // toastClose.current = Toast({
                         //   type: 'icon',
                         //   message: `${info.result}+resultCode+${info.resultCode}`,
@@ -686,9 +727,6 @@ export default function NewHome({
                     } catch (error) {
                       console.error('Error adding label text:', error);
                     }
-
-
-
 
                     // const labelInitCanva: LabelCanvasStyle = {
                     //   width: 50*8,
@@ -703,16 +741,11 @@ export default function NewHome({
                     // } catch (error) {
                     //   console.error('Error adding label area:', error);
                     // }
-
-
-
-
                   }}
                 >
                   printLabel
                 </Text>
               </Col>
-
             </Row>
           </Card>
         </Space>

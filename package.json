@@ -1,6 +1,6 @@
 {
   "name": "react-native-printer-imin",
-  "version": "0.10.5",
+  "version": "0.10.6",
   "description": "Native Module For iMin Printer SDK Plugin",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",

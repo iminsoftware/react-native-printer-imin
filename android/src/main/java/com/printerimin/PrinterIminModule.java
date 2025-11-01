@@ -86,16 +86,20 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
     super(reactContext);
     this.reactContext = reactContext;
     // List<String> modelList = Arrays.asList(modelArry);
-    if (Build.MODEL.contains("W27_Pro") || Build.MODEL.contains("I23D") || Build.MODEL.contains("I23M") || Build.MODEL.contains("I24D") || Build.MODEL.contains("I24T") || Build.MODEL.contains("I24M")) {
-      //初始化 2.0 的 SDK。
-      PrinterHelper.getInstance().initPrinterService(reactContext);
-      sdkVersion = "2.0.0";
-    }
+//    if (Build.MODEL.contains("W27_Pro") || Build.MODEL.contains("I23D") || Build.MODEL.contains("I23M") || Build.MODEL.contains("I24D") || Build.MODEL.contains("I24T") || Build.MODEL.contains("I24M")) {
+//      //初始化 2.0 的 SDK。
+//      PrinterHelper.getInstance().initPrinterService(reactContext);
+//      sdkVersion = "2.0.0";
+//    }
     // if (modelList.contains(Build.MODEL)) {
     //   //初始化 2.0 的 SDK。
     //   PrinterHelper.getInstance().initPrinterService(reactContext);
     //   sdkVersion = "2.0.0";
     // }
+    if (isAndroid15()) {
+      PrinterHelper.getInstance().initPrinterService(reactContext);
+      sdkVersion = "2.0.0";
+    }
     else {
       //初始化 1.0 SDK
 
@@ -2047,6 +2051,15 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
     final Map<String, Object> constants = new HashMap<>();
     constants.put("SDK_VERSION_IMIN", sdkVersion);
     return constants;
+  }
+
+  public static boolean isAndroid15() {
+    // 假设Android 15的API级别是34（实际数字将在Android 15发布时确定）
+    final int ANDROID_15_API_LEVEL = 32;
+    // 获取当前设备的API级别
+    int currentApiLevel = Build.VERSION.SDK_INT;
+    // 判断是否是Android 15
+    return currentApiLevel >= ANDROID_15_API_LEVEL;
   }
 
 }

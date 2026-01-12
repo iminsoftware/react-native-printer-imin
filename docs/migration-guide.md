@@ -606,7 +606,7 @@ const compatCommitBuffer = async () => {
 1. 查看 [常见问题](./faq.md)
 2. 参考 [API文档](./api-reference.md)
 3. 查看 [GitHub Issues](https://github.com/iminsoftware/react-native-printer-imin/issues)
-4. 联系技术支持: softwareteam@imin.sg
+4. 联系技术支持: huayan.xie@imin.com
 
 提交问题时请包含：
 - 迁移前后的版本号

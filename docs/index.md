@@ -127,7 +127,7 @@
 3. 参考 [开发者指南](./developer-guide.md)
 
 ### 技术支持
-- **邮箱**: softwareteam@imin.sg
+- **邮箱**: huayan.xie@imin.com
 - **GitHub**: [react-native-printer-imin](https://github.com/iminsoftware/react-native-printer-imin)
 - **官网**: https://www.imin.sg
 
@@ -136,7 +136,7 @@
 如果您发现文档有误或希望改进，欢迎：
 
 1. 提交 [GitHub Issue](https://github.com/iminsoftware/react-native-printer-imin/issues)
-2. 发送邮件到 softwareteam@imin.sg
+2. 发送邮件到 huayan.xie@imin.com
 3. 提交 Pull Request
 
 ---

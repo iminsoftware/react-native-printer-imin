@@ -126,7 +126,7 @@ If you encounter problems during usage:
 3. Refer to [Developer Guide](./developer-guide.md)
 
 ### Technical Support
-- **Email**: softwareteam@imin.sg
+- **Email**: huayan.xie@imin.com
 - **GitHub**: [react-native-printer-imin](https://github.com/iminsoftware/react-native-printer-imin)
 - **Website**: https://www.imin.sg
 
@@ -135,7 +135,7 @@ If you encounter problems during usage:
 If you find errors in the documentation or wish to improve it, welcome to:
 
 1. Submit [GitHub Issue](https://github.com/iminsoftware/react-native-printer-imin/issues)
-2. Send email to softwareteam@imin.sg
+2. Send email to huayan.xie@imin.com
 3. Submit Pull Request
 
 ---

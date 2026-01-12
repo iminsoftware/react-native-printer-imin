@@ -8,11 +8,11 @@
 
 **Handheld Finance Series**
 - M2-202, M2-203, M2 Pro
-- Swift 1, Swift 2, Swift 2 Pro, Swift 2 Ultra
+- Swift 1, Swift 2, Swift 2 Pro, Swift 2 Ultra, Swift 1 Pro
 
 **Tablet Terminal Series**
 - M2 Max, D1, D1 Pro
-- Falcon 1, Swan 2, Falcon 2
+- Falcon 1, Swan 2, Falcon 2, Falcon 2 Pro, Falcon 1 Pro, Swan 2 Pro
 
 **Desktop POS Equipment**
 - D4, Swan 2, Falcon 2
@@ -20,7 +20,7 @@
 ### Printer Specifications
 
 iMin products come with two types of built-in printers:
-- **80mm paper width**: With cutter, compatible with 58mm (e.g., Falcon 1, Falcon 2、Falcon 2 Pro、Falcon 1 Pro)
+- **80mm paper width**: With cutter, compatible with 58mm (e.g., Falcon 1, Falcon 2, Falcon 2 Pro, Falcon 1 Pro, Swan 2 Pro)
 - **58mm paper width**: Without cutter (e.g., D1, D1 Pro, M2 Max, Swift series)
 
 ## Architecture Design
@@ -470,7 +470,7 @@ class PrintQueue {
 
 - **GitHub Repository**: https://github.com/iminsoftware/react-native-printer-imin
 - **Issue Reporting**: https://github.com/iminsoftware/react-native-printer-imin/issues
-- **Development Team**: iminsoftware <softwareteam@imin.sg>
+- **Development Team**: iminsoftware <huayan.xie@imin.com>
 
 ## License
 

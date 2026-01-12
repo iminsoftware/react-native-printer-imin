@@ -82,11 +82,11 @@ const checkDevice = async () => {
 
 **手持金融系列**:
 - M2-202, M2-203, M2 Pro
-- Swift 1, Swift 2, Swift 2 Pro, Swift 2 Ultra
+- Swift 1, Swift 2, Swift 2 Pro, Swift 2 Ultra, Swift 1 Pro
 
 **平板终端系列**:
 - M2 Max, D1, D1 Pro
-- Falcon 1, Swan 2, Falcon 2
+- Falcon 1, Swan 2, Falcon 2, Falcon 2 Pro, Falcon 1 Pro, Swan 2 Pro
 
 **桌面收银设备**:
 - D4, Swan 2, Falcon 2
@@ -174,7 +174,7 @@ try {
 } catch (error) {
   console.log('设备不支持切纸功能');
   // 只有带切刀的设备才支持此功能
-  // 如: Falcon 1, Falcon 2 (80mm版本)
+  // 如: Falcon 1, Falcon 2, Falcon 2 Pro, Falcon 1 Pro, Swan 2 Pro (80mm版本)
 }
 ```
 
@@ -510,7 +510,7 @@ const printReceipt = async () => {
 1. 查看 [GitHub Issues](https://github.com/iminsoftware/react-native-printer-imin/issues)
 2. 搜索已有问题或创建新的Issue
 3. 提供详细的错误信息和环境配置
-4. 联系技术支持: softwareteam@imin.sg
+4. 联系技术支持: huayan.xie@imin.com
 
 提交Issue时请包含：
 - 设备型号和Android版本

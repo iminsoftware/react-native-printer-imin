@@ -82,11 +82,11 @@ const checkDevice = async () => {
 
 **Handheld Finance Series**:
 - M2-202, M2-203, M2 Pro
-- Swift 1, Swift 2, Swift 2 Pro, Swift 2 Ultra
+- Swift 1, Swift 2, Swift 2 Pro, Swift 2 Ultra, Swift 1 Pro
 
 **Tablet Terminal Series**:
 - M2 Max, D1, D1 Pro
-- Falcon 1, Swan 2, Falcon 2
+- Falcon 1, Swan 2, Falcon 2, Falcon 2 Pro, Falcon 1 Pro, Swan 2 Pro
 
 **Desktop POS Equipment**:
 - D4, Swan 2, Falcon 2
@@ -174,7 +174,7 @@ try {
 } catch (error) {
   console.log('Device does not support paper cutting');
   // Only devices with cutter support this function
-  // e.g., Falcon 1, Falcon 2 (80mm version)
+  // e.g., Falcon 1, Falcon 2, Falcon 2 Pro, Falcon 1 Pro, Swan 2 Pro (80mm version)
 }
 ```
 
@@ -510,7 +510,7 @@ If the above FAQ doesn't solve your problem, please:
 1. Check [GitHub Issues](https://github.com/iminsoftware/react-native-printer-imin/issues)
 2. Search existing issues or create a new Issue
 3. Provide detailed error information and environment configuration
-4. Contact technical support: softwareteam@imin.sg
+4. Contact technical support: huayan.xie@imin.com
 
 When submitting an Issue, please include:
 - Device model and Android version

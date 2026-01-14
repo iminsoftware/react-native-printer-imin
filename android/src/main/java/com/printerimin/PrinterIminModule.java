@@ -2035,7 +2035,11 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
     mBroadcastReceiver = createChargingStateBroadcastReceiver();
     intentFilter.addAction(ACTION_PRITER_STATUS_CHANGE);
     intentFilter.addAction(ACTION_POGOPIN_STATUS_CHANGE);
-    getReactApplicationContext().registerReceiver(mBroadcastReceiver, intentFilter);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        getReactApplicationContext().registerReceiver(mBroadcastReceiver, intentFilter, Context.RECEIVER_EXPORTED);
+    } else {
+        getReactApplicationContext().registerReceiver(mBroadcastReceiver, intentFilter);
+    }
   }
 
   @ReactMethod

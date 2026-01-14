@@ -75,7 +75,7 @@ await PrinterImin.printText('Hello World');
 
 ### Tablet Terminal Series  
 - M2 Max, D1, D1 Pro
-- Falcon 1, Swan 2, Falcon 2, Falcon 2 Pro, Falcon 1 Pro, Swan 2 Pro
+- Falcon 1, Swan 2, Falcon 2, Falcon 2 Pro, Falcon 1 Pro, Swan 2 Pro, Heron 1, Heron 1 mini
 
 ### Desktop POS Equipment
 - D4, Swan 2, Falcon 2

@@ -80,16 +80,7 @@ const checkDevice = async () => {
 
 **A**: 支持的设备包括：
 
-**手持金融系列**:
-- M2-202, M2-203, M2 Pro
-- Swift 1, Swift 2, Swift 2 Pro, Swift 2 Ultra, Swift 1 Pro
-
-**平板终端系列**:
-- M2 Max, D1, D1 Pro
-- Falcon 1, Swan 2, Falcon 2, Falcon 2 Pro, Falcon 1 Pro, Swan 2 Pro
-
-**桌面收银设备**:
-- D4, Swan 2, Falcon 2
+- iMin 自研打印设备
 
 ## 打印功能问题
 
@@ -160,7 +151,7 @@ const checkDevice = async () => {
 
 3. **设置合适的纠错级别**:
    - `levelL`: 约7%的纠错能力
-   - `levelM`: 约15%的纠错能力  
+   - `levelM`: 约15%的纠错能力
    - `levelQ`: 约25%的纠错能力
    - `levelH`: 约30%的纠错能力
 
@@ -174,7 +165,7 @@ try {
 } catch (error) {
   console.log('设备不支持切纸功能');
   // 只有带切刀的设备才支持此功能
-  // 如: Falcon 1, Falcon 2, Falcon 2 Pro, Falcon 1 Pro, Swan 2 Pro (80mm版本)
+  // 如: Falcon 1, Falcon 2, Falcon 2 Pro, Falcon 1 Pro, Swan 2 Pro, Heron 1, Heron 1 mini (80mm版本)
 }
 ```
 
@@ -187,11 +178,11 @@ try {
 1. **使用缓冲区**:
    ```typescript
    await PrinterImin.enterPrinterBuffer(true);
-   
+
    // 批量添加打印内容
    await PrinterImin.printText('内容1');
    await PrinterImin.printText('内容2');
-   
+
    // 一次性打印
    await PrinterImin.commitPrinterBuffer();
    await PrinterImin.exitPrinterBuffer(false);
@@ -207,7 +198,7 @@ try {
    // 避免频繁切换设置
    await PrinterImin.setTextSize(24);
    await PrinterImin.setAlignment(IminPrintAlign.center);
-   
+
    // 批量打印相同格式的内容
    await PrinterImin.printText('内容1');
    await PrinterImin.printText('内容2');
@@ -221,7 +212,7 @@ try {
    ```typescript
    useEffect(() => {
      const unsubscribe = PrinterImin.receiveBroadcastStream.listen(callback);
-     
+
      return () => {
        unsubscribe(); // 重要：组件卸载时取消监听
      };
@@ -244,13 +235,13 @@ try {
    ```typescript
    class PrintQueue {
      private isProcessing = false;
-     
+
      async addTask(task: () => Promise<void>) {
        if (this.isProcessing) {
          console.log('打印队列忙碌，请稍后');
          return;
        }
-       
+
        this.isProcessing = true;
        try {
          await task();
@@ -408,16 +399,16 @@ await PrinterImin.sendRAWData([0x1B, 0x40]);
        if (status.code !== 0) {
          throw new Error(`打印机错误: ${status.message}`);
        }
-       
+
        await PrinterImin.printText(content);
-       
+
      } catch (error) {
        // 记录错误日志
        console.error('打印失败:', error);
-       
+
        // 用户友好的错误提示
        Alert.alert('打印失败', '请检查打印机状态后重试');
-       
+
        // 可选：发送错误报告到服务器
        // reportError(error);
      }
@@ -428,7 +419,7 @@ await PrinterImin.sendRAWData([0x1B, 0x40]);
    ```typescript
    const monitoredPrint = async (content: string) => {
      const startTime = Date.now();
-     
+
      try {
        await PrinterImin.printText(content);
        const duration = Date.now() - startTime;
@@ -466,7 +457,7 @@ class PrinterQueue {
           reject(error);
         }
       });
-      
+
       this.process();
     });
   }

@@ -80,16 +80,7 @@ const checkDevice = async () => {
 
 **A**: Supported devices include:
 
-**Handheld Finance Series**:
-- M2-202, M2-203, M2 Pro
-- Swift 1, Swift 2, Swift 2 Pro, Swift 2 Ultra, Swift 1 Pro
-
-**Tablet Terminal Series**:
-- M2 Max, D1, D1 Pro
-- Falcon 1, Swan 2, Falcon 2, Falcon 2 Pro, Falcon 1 Pro, Swan 2 Pro
-
-**Desktop POS Equipment**:
-- D4, Swan 2, Falcon 2
+- iMin Self-developed Printing Devices
 
 ## Printing Function Issues
 
@@ -174,7 +165,7 @@ try {
 } catch (error) {
   console.log('Device does not support paper cutting');
   // Only devices with cutter support this function
-  // e.g., Falcon 1, Falcon 2, Falcon 2 Pro, Falcon 1 Pro, Swan 2 Pro (80mm version)
+  // e.g., Falcon 1, Falcon 2, Falcon 2 Pro, Falcon 1 Pro, Swan 2 Pro, Heron 1, Heron 1 mini (80mm version)
 }
 ```
 

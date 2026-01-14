@@ -6,22 +6,7 @@
 
 ### 支持的设备
 
-**手持金融系列**
-- M2-202、M2-203、M2 Pro
-- Swift 1、Swift 2、Swift 2 Pro、Swift 2 Ultra、Swift 1 Pro
-
-**平板终端系列**
-- M2 Max、D1、D1 Pro
-- Falcon 1、Swan 2、Falcon 2、Falcon 2 Pro、Falcon 1 Pro、Swan 2 Pro
-
-**桌面收银设备**
-- D4、Swan 2、Falcon 2
-
-### 打印机规格
-
-iMin产品配备两种内置打印机：
-- **80mm纸宽**：带切刀，兼容58mm（如Falcon 1、Falcon 2、Falcon 2 Pro、Falcon 1 Pro、Swan 2 Pro）
-- **58mm纸宽**：无切刀（如D1、D1 Pro、M2 Max、Swift系列）
+- iMin 自研打印设备
 
 ## 架构设计
 

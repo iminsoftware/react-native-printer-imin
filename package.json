@@ -1,6 +1,6 @@
 {
   "name": "react-native-printer-imin",
-  "version": "0.10.6",
+  "version": "0.10.7",
   "description": "Native Module For iMin Printer SDK Plugin",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -39,7 +39,10 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/iminsoftware/react-native-printer-imin",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iminsoftware/react-native-printer-imin.git"
+  },
   "author": "iminsoftware <softwareteam@imin.sg> (https://github.com/iminsoftware)",
   "license": "MIT",
   "bugs": {

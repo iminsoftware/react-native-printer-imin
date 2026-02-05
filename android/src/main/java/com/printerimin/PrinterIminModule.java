@@ -1625,11 +1625,12 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
     try {
       if (iminPrintUtils == null) {
         String text = config.getString("text");
+        Log.d("printText===>","text===>   "+text);
         if (config.hasKey("align")) {
           int align = config.getInt("align");
-          PrinterHelper.getInstance().printTextBitmapWithAli(text + "\n", align, null);
+          PrinterHelper.getInstance().printTextBitmapWithAli(text, align, null);
         } else {
-          PrinterHelper.getInstance().printTextBitmap(text + "\n", null);
+          PrinterHelper.getInstance().printTextBitmap(text, null);
         }
       }
       promise.resolve(null);
@@ -2035,7 +2036,13 @@ public class PrinterIminModule extends ReactContextBaseJavaModule {
     mBroadcastReceiver = createChargingStateBroadcastReceiver();
     intentFilter.addAction(ACTION_PRITER_STATUS_CHANGE);
     intentFilter.addAction(ACTION_POGOPIN_STATUS_CHANGE);
-    getReactApplicationContext().registerReceiver(mBroadcastReceiver, intentFilter);
+
+    // For Android 13+ (API 33+), we need to specify RECEIVER_NOT_EXPORTED
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      getReactApplicationContext().registerReceiver(mBroadcastReceiver, intentFilter, Context.RECEIVER_NOT_EXPORTED);
+    } else {
+      getReactApplicationContext().registerReceiver(mBroadcastReceiver, intentFilter);
+    }
   }
 
   @ReactMethod

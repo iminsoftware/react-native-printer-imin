@@ -74,12 +74,27 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     namespace "com.printeriminexample"
+
+    buildFeatures {
+        buildConfig true
+    }
+
+
+  def date = new Date().format("yyMMddHHmm", TimeZone.getTimeZone("GMT+08"))
+  def versionCODE = 1
+  def versionNames = "1.0."+versionCODE+"_"+date
+  android.applicationVariants.all { variant ->
+    variant.outputs.all {
+      outputFileName = "IminPrinterService-"+versionCode+"_V"+versionName+".apk"
+    }
+  }
+
     defaultConfig {
         applicationId "com.printeriminexample"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode versionCODE
+        versionName versionNames
     }
      signingConfigs {
         debug {
@@ -88,12 +103,16 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
-        //  release {
-        //     storeFile file('my-release-key.keystore')
-        //     storePassword '123456'
-        //     keyAlias 'my-key-alias'
-        //     keyPassword '123456'
-        // }
+          release {
+//             storeFile file('my-release-key.keystore')
+//             storePassword '123456'
+//             keyAlias 'my-key-alias'
+//             keyPassword '123456'
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+         }
     }
     buildTypes {
         debug {
@@ -102,7 +121,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             // signingConfig signingConfigs.release

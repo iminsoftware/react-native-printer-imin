@@ -5,6 +5,7 @@ import {
   Text,
   PermissionsAndroid,
   Permission,
+  Alert,
 } from 'react-native';
 import {
   Space,
@@ -16,7 +17,7 @@ import {
 import { InfoCircleOutline } from '@fruits-chain/icons-react-native';
 import PrinterImin, {
   IminPrintAlign,
-  // IminTypeface,
+  IminFontStyle,
   IminQrcodeCorrectionLevel,
   ShapeStyle,
 } from 'react-native-printer-imin';
@@ -420,7 +421,24 @@ export default function NewHome({
                         align: IminPrintAlign.left,
                       },
                     ]);
-                    await PrinterImin.printAndFeedPaper(100);
+
+
+//                   await PrinterImin.printColumnsString([
+//                                         {
+//                                           text: 'Entry Gate',
+//                                           width: 1,
+//                                           fontSize: 24,
+//                                           align: IminPrintAlign.left,
+//                                         },
+//
+//                                         {
+//                                           text: 'Slip No',
+//                                           width: 2,
+//                                           fontSize: 24,
+//                                           align: IminPrintAlign.right,
+//                                         },
+//                                       ]);
+//                     await PrinterImin.printAndFeedPaper(100);
                   }}
                 >
                   printColumnsString
@@ -581,6 +599,214 @@ export default function NewHome({
                   printAndLineFeed
                 </Text>
               </Col>
+
+              <Col span={12}>
+                <Text
+                  style={styles.item}
+                  onPress={async () => {
+                    // 标题 - 居中加粗 28号字
+                    await PrinterImin.setCodeAlignment(IminPrintAlign.center);
+                    await PrinterImin.printTextBitmap('Sian Chay Medical Institution', {
+                      fontSize: 38,
+                      fontStyle: IminFontStyle.bold,
+                    });
+
+                    // 副标题 - 居中 24号字
+                    await PrinterImin.printTextBitmap('General Fund', {
+                      fontSize: 34,
+                      fontStyle: IminFontStyle.normal,
+                    });
+
+                    // 地址信息 - 居中
+                    await PrinterImin.printTextBitmap('3 Simei Street 6, Eastpoint Mall', {
+                      fontSize: 30,
+      
+                    });
+                    await PrinterImin.printTextBitmap('03-26', {
+                      fontSize: 30,
+                    });
+                    await PrinterImin.printTextBitmap('Singapore 528833', {
+                      fontSize: 30,
+                      fontStyle: IminFontStyle.normal,
+                    });
+                    await PrinterImin.printTextBitmap('T: 90263202', {
+                      fontSize: 30,
+                      fontStyle: IminFontStyle.normal,
+                    });
+                    await PrinterImin.printTextBitmap('hello@sianchay.org.sg', {
+                      fontSize: 30,
+                      fontStyle: IminFontStyle.normal,
+                    });
+
+                    // 活动名称 - 居中加粗
+                    await PrinterImin.printTextBitmap('Love Bento Campaign @ Bedok', {
+                      fontSize: 34,
+                      fontStyle: IminFontStyle.bold,
+                    });
+
+                    // 分隔线
+                    await PrinterImin.printAndLineFeed();
+                    await PrinterImin.printTextBitmap('.......................................................', {
+                      fontSize: 28,
+                    });
+                    await PrinterImin.printAndLineFeed();
+
+                    // 设备和ID信息 - 一行三列
+                    await PrinterImin.printColumnsText([
+                      {
+                        text: 'Device:',
+                        width: 80,
+                        fontSize: 20,
+                        align: IminPrintAlign.left,
+                      },
+                      {
+                        text: 'Tampines T02 - 3',
+                        width: 150,
+                        fontSize: 20,
+                        align: IminPrintAlign.left,
+                      },
+                      {
+                        text: 'ID: 6848456487213',
+                        width: 150,
+                        fontSize: 20,
+                        align: IminPrintAlign.right,
+                      },
+                    ]);
+
+                    // 日期和服务员信息 - 一行两列
+                    await PrinterImin.printColumnsText([
+                      {
+                        text: '13/05/2022  21:11',
+                        width: 200,
+                        fontSize: 20,
+                        align: IminPrintAlign.left,
+                      },
+                      {
+                        text: 'Served by: Dhong',
+                        width: 180,
+                        fontSize: 20,
+                        align: IminPrintAlign.right,
+                      },
+                    ]);
+
+                    // 分隔线
+                    await PrinterImin.printTextBitmap('.......................................................', {
+                      fontSize: 28,
+                    });
+                    await PrinterImin.printAndLineFeed();
+                    
+                    // 总金额 - 一行两列
+                    await PrinterImin.printColumnsText([
+                      {
+                        text: 'Total:',
+                        width: 150,
+                        fontSize: 28,
+                        align: IminPrintAlign.left,
+                      },
+                      {
+                        text: '$50,000.00',
+                        width: 230,
+                        fontSize: 28,
+                        align: IminPrintAlign.right,
+                      },
+                    ]);
+
+                    // 分隔线
+                    await PrinterImin.printAndLineFeed();
+                    await PrinterImin.printTextBitmap('.......................................................', {
+                      fontSize: 28,
+                    });
+                    await PrinterImin.printAndLineFeed();
+
+                    await PrinterImin.setCodeAlignment(IminPrintAlign.left);
+                    // 交易详情
+                    await PrinterImin.printTextBitmap('Approval Code=541405', {
+                      fontSize: 30,
+                    });
+                    await PrinterImin.printTextBitmap('CardNumber=XXXXXXXXXXXXX1464', {
+                      fontSize: 30,
+                    });
+                    await PrinterImin.printTextBitmap('InvoiceNumber=4723990', {
+                      fontSize: 30,
+                    });
+
+                    // 分隔线
+                    await PrinterImin.printAndLineFeed();
+                    await PrinterImin.printTextBitmap('.......................................................', {
+                      fontSize: 28,
+                    });
+                    await PrinterImin.printAndLineFeed();
+
+                    // 收款信息
+                    await PrinterImin.printTextBitmap('Received from', {
+                      fontSize: 30,
+                      fontStyle: IminFontStyle.normal,
+                    });
+                    await PrinterImin.printTextBitmap('Wen Yu Sheng (*****232B)', {
+                      fontSize: 32,
+                      fontStyle: IminFontStyle.bold,
+                    });
+                    await PrinterImin.printTextBitmap('Honorary Treasurer', {
+                      fontSize: 30,
+                      fontStyle: IminFontStyle.normal,
+                    });
+                    await PrinterImin.printTextBitmap('Sian Chay Medical Institution', {
+                      fontSize: 32,
+                      fontStyle: IminFontStyle.bold,
+                    });
+                    await PrinterImin.printTextBitmap('Registration No', {
+                      fontSize: 30,
+                      fontStyle: IminFontStyle.normal,
+                    });
+                    await PrinterImin.printTextBitmap('HEF 0039/G', {
+                      fontSize: 32,
+                      fontStyle: IminFontStyle.bold,
+                    });
+                    await PrinterImin.printTextBitmap('Receipt No', {
+                      fontSize: 20,
+                    });
+                    await PrinterImin.printTextBitmap('SRC879841000112', {
+                      fontSize: 32,
+                      fontStyle: IminFontStyle.bold,
+                    });
+                    await PrinterImin.printTextBitmap('Sector Administrator', {
+                      fontSize: 30,
+                      fontStyle: IminFontStyle.normal,
+                    });
+                    await PrinterImin.printTextBitmap('Ministry of Health', {
+                      fontSize: 32,
+                      fontStyle: IminFontStyle.bold,
+                    });
+
+                    // 分隔线
+                    await PrinterImin.printAndLineFeed();
+                    await PrinterImin.printTextBitmap('.......................................................', {
+                      fontSize: 28,
+                    });
+                    await PrinterImin.printAndLineFeed();
+
+                    // 备注
+                    await PrinterImin.printTextBitmap('Note.', {
+                      fontSize: 30,
+                    });
+
+                    // 分隔线
+                    await PrinterImin.printAndLineFeed();
+                    await PrinterImin.printTextBitmap('.......................................................', {
+                      fontSize: 28,
+                    });
+
+                    // 走纸
+                    await PrinterImin.printAndFeedPaper(100);
+
+                    await PrinterImin.partialCut();
+
+                  }}
+                >
+                  printTestDemo
+                </Text>
+              </Col>
+
               <Col span={12}>
                 <Text
                   style={styles.item}

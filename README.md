@@ -73,7 +73,7 @@ await PrinterImin.printText('Hello World');
 - M2-202, M2-203, M2 Pro
 - Swift 1, Swift 2, Swift 2 Pro, Swift 2 Ultra, Swift 1 Pro
 
-### Tablet Terminal Series  
+### Tablet Terminal Series
 - M2 Max, D1, D1 Pro
 - Falcon 1, Swan 2, Falcon 2, Falcon 2 Pro, Falcon 1 Pro, Swan 2 Pro, Heron 1, Heron 1 mini
 
@@ -91,6 +91,8 @@ MIT
 ---
 
 Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
+# 更新0.10.7 版本 Updated to version 0.10.5
+更新内容 ： 修复已知bug  Update details: fix bug
 # 更新0.10.5 版本 Updated to version 0.10.5
 更新内容 ： 适配A15  Update details: Adapted for A15
 # 更新0.10.4版本  Updated to version 0.10.4

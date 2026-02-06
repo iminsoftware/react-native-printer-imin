@@ -91,7 +91,7 @@ MIT
 ---
 
 Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
-# 更新0.10.7 版本 Updated to version 0.10.5
+# 更新0.10.8 版本 Updated to version 0.10.8
 更新内容 ： 修复已知bug  Update details: fix bug
 # 更新0.10.5 版本 Updated to version 0.10.5
 更新内容 ： 适配A15  Update details: Adapted for A15

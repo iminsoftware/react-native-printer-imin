@@ -90,7 +90,7 @@ const PrinterSDK: IminPrinterType = {
   setAlignment: PrinterImin.setAlignment,
   setTextLineSpacing: PrinterImin.setTextLineSpacing,
   printText(text: string, style?: IminTextStyle) {
-    let textStr = `${text}\n`;
+    let textStr = text;
     if (style) {
       if (style.wordWrap !== undefined && style.wordWrap === false) {
         textStr = text;
@@ -367,7 +367,7 @@ const PrinterSDK: IminPrinterType = {
   setTextBitmapLetterSpacing: PrinterImin.setTextBitmapLetterSpacing,
   setTextBitmapAntiWhite: PrinterImin.setTextBitmapAntiWhite,
   printTextBitmap(text: string, style?: IminTextPictureStyle) {
-    let textStr = `${text}\n`;
+    let textStr = text;
     if (style) {
       if (style.wordWrap !== undefined && style.wordWrap === false) {
         textStr = text;

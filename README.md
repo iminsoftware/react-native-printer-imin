@@ -91,6 +91,8 @@ MIT
 ---
 
 Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
+# 更新0.10.10 版本 Updated to version 0.10.10
+更新内容 ： 修复已知bug,printText空行问题  Update details: Fixed known bugs, including the issue of blank lines in printText.
 # 更新0.10.8 版本 Updated to version 0.10.8
 更新内容 ： 修复已知bug  Update details: fix bug
 # 更新0.10.5 版本 Updated to version 0.10.5

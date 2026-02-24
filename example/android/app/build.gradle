@@ -85,7 +85,7 @@ android {
   def versionNames = "1.0."+versionCODE+"_"+date
   android.applicationVariants.all { variant ->
     variant.outputs.all {
-      outputFileName = "IminPrinterService-"+versionCode+"_V"+versionName+".apk"
+      outputFileName = "RNPrintDemo-"+versionCode+"_V"+versionName+".apk"
     }
   }
 

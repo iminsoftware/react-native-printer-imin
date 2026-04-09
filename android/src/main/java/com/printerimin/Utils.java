@@ -278,23 +278,23 @@ public class Utils {
     if (code == 0) {
       return "Printer is normal!";
     } else if (code == 1) {
-      return "The printer and call library do not match!";
+      return "Printer not connected or powered on!";
     } else if (code == 3) {
-      return "Print head open!";
+      return "Printer door is open!";
     } else if (code == 4) {
-      return "The cutter is not reset!!";
+      return "Cutter not reset!";
     } else if (code == 5) {
-      return "Overheated!";
+      return "Printer head overheated!";
     } else if (code == 6) {
       return "Black label error!";
     } else if (code == 7) {
-      return "No Paper Feed!";
+      return "Paper missing!";
     } else if (code == 8) {
-      return "Paper Running Out!";
+      return "Paper is running out!";
     } else if (code == 99) {
       return "Other errors!";
     } else {
-      return "Printer is not connected or powered on!";
+      return "Printer initialization failed!";
     }
   }
 }

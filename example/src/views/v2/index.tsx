@@ -5,7 +5,6 @@ import {
   Text,
   PermissionsAndroid,
   Permission,
-  Alert,
 } from 'react-native';
 import {
   Space,
@@ -61,7 +60,8 @@ export default function NewHome({
         icon: <InfoCircleOutline size={40} color="#f30" />,
       });
     }
-  });
+  }, [printerStatus]);
+
   const getMediaFilePermission = async () => {
     try {
       const granted = await PermissionsAndroid.requestMultiple([
@@ -84,7 +84,11 @@ export default function NewHome({
       console.error(e);
     }
   };
-  getMediaFilePermission();
+
+  React.useEffect(() => {
+    getMediaFilePermission();
+  }, []);
+
   return (
     <>
       <ScrollView>
@@ -122,26 +126,8 @@ export default function NewHome({
               <Col span={12}>
                 <Text
                   style={styles.item}
-                  onPress={async () => {
-                    await navigation.navigate('PrinterInfo', {
-                      serialNumber: await PrinterImin.getPrinterSerialNumber(),
-                      modelName: await PrinterImin.getPrinterModelName(),
-                      thermalHead: await PrinterImin.getPrinterThermalHead(),
-                      firmwareVersion:
-                        await PrinterImin.getPrinterFirmwareVersion(),
-                      printServiceVersion:
-                        await PrinterImin.getServiceVersion(),
-                      hardwareVersion:
-                        await PrinterImin.getPrinterHardwareVersion(),
-                      usbPrinterVidPid: await PrinterImin.getUsbPrinterVidPid(),
-                      usbDevicesName: await PrinterImin.getUsbDevicesName(),
-                      printerDensity: await PrinterImin.getPrinterDensity(),
-                      paperDistance:
-                        await PrinterImin.getPrinterPaperDistance(),
-                      paperType: await PrinterImin.getPrinterPaperType(),
-                      printerCutTimes: await PrinterImin.getPrinterCutTimes(),
-                      printerMode: await PrinterImin.getPrinterMode(),
-                    });
+                  onPress={() => {
+                    navigation.navigate('PrinterInfo');
                   }}
                 >
                   Printer Info

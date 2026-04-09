@@ -22,13 +22,12 @@ export default function App() {
       console.log(payload.eventData, payload.eventName);
       if (payload.eventName === 'printer_status') {
         setPrinterStatus(payload.eventData);
-        console.log(printerStatus);
       }
     });
     return () => {
       close();
     };
-  }, [printerStatus]);
+  }, []);
   console.log('version:', PrinterImin.version);
   return (
     <Provider>

@@ -50,7 +50,7 @@ export default function PrintText() {
             }
           />
           <Cell
-            title="Letter Spacing"
+            title="Line Spacing"
             value={
               <TextInput
                 value={letterSpacing}

@@ -7154,10 +7154,10 @@ react-native-popover-view@^5.1.8:
     react-native-svg "^13.14.0"
     rn-placeholder "^3.0.3"
 
-react-native-printer-imin@^0.10.7:
-  version "0.10.7"
-  resolved "https://registry.npmjs.org/react-native-printer-imin/-/react-native-printer-imin-0.10.7.tgz"
-  integrity sha512-8K1PZkGonDzQmSp/yB91mbD9lva4oTzZNdE8DX8/tT+CtDTSjhNxlCOTjhI+qW5sB4deLKrhNXbR+yuBfRO2FA==
+react-native-printer-imin@^0.10.10:
+  version "0.10.10"
+  resolved "https://registry.npmjs.org/react-native-printer-imin/-/react-native-printer-imin-0.10.10.tgz"
+  integrity sha512-sXl0PUwvn5sRmqUUhQR8WkyVF87ge5teFYxayvsDJW7S95WF2vecvsC8fVkJNQmlsK3eYH96hq9maZ88S7NBhg==
   dependencies:
     react-native-device-info "^14.0.4"
 

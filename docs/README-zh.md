@@ -1,39 +1,39 @@
 # react-native-printer-imin
 
-> Language: **English** | [中文](README-zh.md)
+> 语言: [English](README.md) | **中文**
 
-Native module for iMin built-in thermal printers. Supports text, image, barcode, QR code, and label printing.
+iMin 内置热敏打印机 React Native 原生模块插件，支持文本、图片、条码、QR 码、标签打印。
 
-## Device Info
+## 设备信息
 
-| Paper Width | Printable Pixels | Cutter |
-|-------------|-----------------|--------|
-| 80mm | 576px | Yes (some models) |
-| 58mm | 384px | No |
+| 纸宽 | 可打印像素宽度 | 有切刀 |
+|------|--------------|--------|
+| 80mm | 576px | 部分型号 |
+| 58mm | 384px | 无 |
 
-| SDK Version | Notes |
-|-------------|-------|
-| 2.0 | Full features, Android 15+ |
-| 1.0 | Basic printing, older devices |
+| SDK 版本 | 说明 |
+|---------|------|
+| 2.0 | 完整功能，Android 15+ 设备 |
+| 1.0 | 基础打印功能，旧设备 |
 
-## Installation
+## 安装
 
 ```bash
 npm install react-native-printer-imin
-# or
+# 或
 yarn add react-native-printer-imin
 ```
 
-Rebuild native code after installation (Expo Go not supported):
+安装后需要重新编译原生代码（不支持 Expo Go）：
 
 ```bash
 cd android && ./gradlew clean && cd ..
 npx react-native run-android
 ```
 
-### Android Configuration
+### Android 配置
 
-Add to `android/app/proguard-rules.pro` (if using ProGuard):
+如果启用了 ProGuard，在 `android/app/proguard-rules.pro` 中添加：
 
 ```proguard
 -keep class com.imin.** { *; }
@@ -41,39 +41,39 @@ Add to `android/app/proguard-rules.pro` (if using ProGuard):
 -dontwarn com.imin.**
 ```
 
-## Quick Start
+## 快速开始
 
 ```typescript
 import PrinterImin, { IminPrintAlign, IminFontStyle } from 'react-native-printer-imin';
 
-// 1. Initialize
+// 1. 初始化
 await PrinterImin.initPrinter();
 
-// 2. Check status
+// 2. 检查状态
 const status = await PrinterImin.getPrinterStatus();
 if (status.code !== '0') {
-  console.log('Printer error:', status.message);
+  console.log('打印机异常:', status.message);
   return;
 }
 
-// 3. Print text
+// 3. 打印文本
 await PrinterImin.printText('Hello World', {
   fontSize: 28,
-  fontStyle: 1,  // bold
-  align: 1,      // center
+  fontStyle: 1,  // 加粗
+  align: 1,      // 居中
 });
 
-// 4. Print QR code
+// 4. 打印 QR 码
 await PrinterImin.printQrCode('https://www.imin.sg', {
   qrSize: 6,
   align: 1,
 });
 
-// 5. Feed paper
+// 5. 走纸
 await PrinterImin.printAndFeedPaper(100);
 ```
 
-## Receipt Example
+## 小票打印示例
 
 ```typescript
 const printReceipt = async () => {
@@ -86,7 +86,7 @@ const printReceipt = async () => {
   await PrinterImin.printAndLineFeed();
   await PrinterImin.printText('--------------------------------');
 
-  // width is pixel width, 80mm paper = 576px total
+  // width 是像素宽度，80mm 纸总宽 576px
   await PrinterImin.printColumnsText([
     { text: 'Coffee', width: 250, fontSize: 24, align: 0 },
     { text: 'x2',     width: 100, fontSize: 24, align: 1 },
@@ -106,26 +106,26 @@ const printReceipt = async () => {
 };
 ```
 
-## Error Handling
+## 错误处理
 
 ```typescript
 try {
   const status = await PrinterImin.getPrinterStatus();
   if (status.code !== '0') {
-    throw new Error('Printer error: ' + status.message);
+    throw new Error('打印机异常: ' + status.message);
   }
   await PrinterImin.printText('Hello World');
 } catch (e) {
-  console.error('Print error:', e);
+  console.error('打印错误:', e);
 }
 ```
 
-## API Reference
+## API 文档
 
-Complete method documentation -> [api.md](api.md)
+完整方法参考 -> [api-zh.md](api-zh.md)
 
-## Resources
+## 资源
 
 - [npm Package](https://www.npmjs.com/package/react-native-printer-imin)
 - [GitHub Repository](https://github.com/iminsoftware/react-native-printer-imin)
-- [Official iMin Printer SDK Doc](https://oss-sg.imin.sg/docs/en/PrinterSDK.html)
+- [iMin 官方打印 SDK 文档](https://oss-sg.imin.sg/docs/en/PrinterSDK.html)
